@@ -418,15 +418,3 @@ function gmLoop() {
 export function getInst() {
 	return inst;
 }
-
-export function getC() {
-	return c;
-}
-
-export function getSAlert1() {
-	return sAlert1;
-}
-
-export function getSAlert2() {
-	return sAlert2;
-}
