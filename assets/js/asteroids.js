@@ -258,6 +258,8 @@ function oSpaceshipUD()
 	{
 		if (k1)
 		{
+			var shotSfx = new Audio("./assets/audio/laser-bolt.mp3");
+			shotSfx.play();
 			this.shoot();
 			this.shootCooldown = this.shootCooldownReset;
 		}
