@@ -4,7 +4,7 @@ This is an asteroids clone I wrote in JavaScript for my school's coding club off
 
 ![in-game screenshot](./assets/images/screenshot.png)
 
-In the game, you use the arrow keys to turn and accelerate your ship and the Z key to shoot.
+In the game, you use the arrow keys to turn and accelerate your ship and shoot with Z key on AZERTY keyboard or W key on QWERTY keyboard.
 
 As the game runs, asteroids will increasingly fill the screen, and you must last as long as possible, cautiously drifting around them and shooting them to pieces to survive.
 

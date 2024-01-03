@@ -74,27 +74,27 @@ var kl = 0, kr = 0, ku = 0, kd = 0, k1 = 0, k2 = 0;
 // Listen for keyboard input
 document.addEventListener("keydown", function(e)
 {
-	switch (e.keyCode)
+	switch (e.code)
 	{
-		case 37:{kl=1;e.preventDefault();break;}
-		case 39:{kr=1;e.preventDefault();break;}
-		case 40:{kd=1;e.preventDefault();break;}
-		case 38:{ku=1;e.preventDefault();break;}
+		case "ArrowLeft":{kl=1;e.preventDefault();break;}
+		case "ArrowRight":{kr=1;e.preventDefault();break;}
+		case "ArrowDown":{kd=1;e.preventDefault();break;}
+		case "ArrowUp":{ku=1;e.preventDefault();break;}
 		
-		case 90:{k1=1;break;}
-		case 13:{k2=1;break;}
+		case "KeyW":{k1=1;break;}
+		case "Enter":{k2=1;break;}
 	}
 });
 document.addEventListener("keyup", function(e)
 {
-	switch (e.keyCode)
+	switch (e.code)
 	{
-		case 37:{kl=0;break;}
-		case 39:{kr=0;break;}
-		case 40:{kd=0;break;}
-		case 38:{ku=0;break;}
+		case "ArrowLeft":{kl=0;break;}
+		case "ArrowRight":{kr=0;break;}
+		case "ArrowDown":{kd=0;break;}
+		case "ArrowUp":{ku=0;break;}
 
-		case 90:{k1=0;break;}
+		case "KeyW":{k1=0;break;}
 	}
 });
 
