@@ -1,7 +1,7 @@
 body{
     background-color: #001145;
     color: #ffffff;
-    background-image: url(pagebg.png);
+    background-image: url(../images/pagebg.png);
 }
 #content{
     text-align: center;
