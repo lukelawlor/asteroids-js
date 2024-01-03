@@ -363,6 +363,7 @@ function oTitleUD()
 	c.fillText("Bad Asteroid Game", GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 60);
 	c.fillStyle = TEXT_COLOR_GREEN;
 	c.fillText("by Luke Lawlor", GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 30);
+	c.fillText("Improve by Arthur, Alexis & Victor", GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 1);
 	c.fillText("Press Enter to Play", GAME_WIDTH_HALF, GAME_HEIGHT_HALF + 20);
 
 	if (k2)
