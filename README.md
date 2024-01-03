@@ -12,7 +12,8 @@ This is an asteroids clone I wrote in JavaScript for my school's coding club off
 ## Usage
 
 -   Use the arrow keys to turn and accelerate your ship, or slow down
--   Use the Z key to shoot
+    -   or use ZQSD if you're French
+-   Use the Space key to shoot
 -   As the game runs, asteroids will increasingly fill the screen, and you must last as long as possible, cautiously drifting around them and shooting them to pieces to survive.
 -   When an asteroid is about to spawn, an alert will be displayed where it will pop up
 -   The game ends when you collide with an asteroid
