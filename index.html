@@ -22,36 +22,37 @@
         <h1 id="gameTitle"></h1>
       </header>
 
-      <section class="game-controls">
-        <div class="instructions">
-          <h4 id="turnLeft"></h4>
-          <h4 id="moveUp"></h4>
-          <h4 id="brakeDown"></h4>
-          <h4 id="spaceShoot"></h4>
-          <h4 id="pressEnter"></h4>
-          <h4 id="pressEscape"></h4>
-          <h4 id="toggleSound"></h4>
-          <a href="doc.html"
-             id="learnHow"></a>
+      <div class="game-container">
+        <div class="game-controls">
+          <div class="instructions">
+            <h4 id="turnLeft"></h4>
+            <h4 id="moveUp"></h4>
+            <h4 id="brakeDown"></h4>
+            <h4 id="spaceShoot"></h4>
+            <h4 id="pressEnter"></h4>
+            <h4 id="pressEscape"></h4>
+            <h4 id="toggleSound"></h4>
+            <a href="doc.html"
+               id="learnHow"></a>
+          </div>
+          <div class="language-buttons">
+            <button onclick="changeLanguage('fr')"
+                    aria-label="Change to French">
+              <img src="/images/fr.png"
+                   alt="French Flag">
+            </button>
+            <button onclick="changeLanguage('en')"
+                    aria-label="Change to English">
+              <img src="/images/en.png"
+                   alt="English Flag">
+            </button>
+          </div>
         </div>
-        <div class="language-buttons">
-          <button onclick="changeLanguage('fr')"
-                  aria-label="Change to French">
-            <img src="/images/fr.png"
-                 alt="French Flag">
-          </button>
-          <button onclick="changeLanguage('en')"
-                  aria-label="Change to English">
-            <img src="/images/en.png"
-                 alt="English Flag">
-          </button>
-        </div>
-      </section>
 
-
-      <canvas id="can"
-              width="0"
-              height="0">Your browser does not support the HTML5 canvas.</canvas>
+        <canvas id="can"
+                width="0"
+                height="0">Your browser does not support the HTML5 canvas.</canvas>
+      </div>
 
       <footer>
         <div class="development-tools">
