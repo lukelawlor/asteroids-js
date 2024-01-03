@@ -1,15 +1,15 @@
 body {
 	background-color: #001145;
 	color: #ffffff;
-	background-image: url(images/pagebg.png);
+	background-image: url("../public/images/pagebg.png");
 	font-family: 'Arial', sans-serif;
+	margin: 0;
 }
 
 #content {
 	text-align: center;
 	max-width: 1200px;
 	margin: 0 auto;
-	padding: 15px;
 }
 
 #can {
