@@ -14,6 +14,8 @@ const PLAYER_SPEED_BULLET = 10;
 const ALERT_FRAMES = 8;
 const ALERT_DURATION = 110;
 
+const MAX_FPS = 60;
+
 const SPAWN_TIME_START = 240;
 const SPAWN_TIME_DEC = 10;
 const SPAWN_TIME_MIN = 50;
@@ -40,6 +42,10 @@ var byt1 = 0;
 var bxt2 = 0;
 var byt2 = 0;
 var gameAudioLoop = new Audio("./assets/audio/game-theme-loop.mp3")
+var fpsInterval = Math.round(1000 / MAX_FPS);
+var then = Date.now();
+var startTime = then;
+var fps = 0;
 
 // Instances
 var inst = new Array(MAX_INSTANCES);
@@ -552,42 +558,53 @@ function gmLoop()
 	// Request another frame
 	requestAnimationFrame(gmLoop);
 
-	// Clear Screen
-	c.clearRect(0,0,cv.width,cv.height);	
+    // calc elapsed time since last loop
+    now = Date.now();
+    elapsed = now - then;
 
-	// Draw Background
-	drawBg();
+    // if enough time has elapsed, draw the next frame
+    if (elapsed > fpsInterval) {
+        // Get ready for next frame by setting then=now, but also adjust for your
+        // specified fpsInterval not being a multiple of RAF's interval (16.7ms)
+        then = now - (elapsed % fpsInterval);
+        
+		// Clear Screen
+		c.clearRect(0,0,cv.width,cv.height);	
+
+		// Draw Background
+		drawBg();
 	
-	// Update Instances
-	for (var i = 0; i < MAX_INSTANCES; ++i)
-		if (inst[i] != null)
-			inst[i].ud();
-	
-	// Spawn Asteroids
-	if (spawning && (--spawnTime) <= 0)
-	{
-		// Spawn Asteroid
-		var x = Math.random() * GAME_WIDTH;
-		var y = Math.random() * GAME_HEIGHT;
-		new makeInst(x, y, 3);
+		// Update Instances
+		for (var i = 0; i < MAX_INSTANCES; ++i)
+			if (inst[i] != null)
+				inst[i].ud();
+		
+		// Spawn Asteroids
+		if (spawning && (--spawnTime) <= 0)
+		{
+			// Spawn Asteroid
+			var x = Math.random() * GAME_WIDTH;
+			var y = Math.random() * GAME_HEIGHT;
+			new makeInst(x, y, 3);
 
-		// Reset Spawn Time
-		spawnTimeReset -= SPAWN_TIME_DEC;
-		if (spawnTimeReset < SPAWN_TIME_MIN)
-			spawnTimeReset = SPAWN_TIME_MIN;
-		spawnTime = spawnTimeReset;
-	}
-	
-	// Keyboard Input
-	stopKeyRepeat();
+			// Reset Spawn Time
+			spawnTimeReset -= SPAWN_TIME_DEC;
+			if (spawnTimeReset < SPAWN_TIME_MIN)
+				spawnTimeReset = SPAWN_TIME_MIN;
+			spawnTime = spawnTimeReset;
+		}
 
-	// Show Framerate & Score
-	updateFramerate();
+		// Keyboard Input
+		stopKeyRepeat();
 
-	c.fillStyle = TEXT_COLOR_GREEN;
-	c.font = "16px Courier";
-	c.textAlign = "left";
-	c.fillText("FPS: " + fps, 6, 16);
-	c.fillText("SCORE: " + score, 6, 32);
-	c.fillText("HISCORE: " + highScore, 6, 48);
+		// Show Framerate & Score
+		updateFramerate();
+
+		c.fillStyle = TEXT_COLOR_GREEN;
+		c.font = "16px Courier";
+		c.textAlign = "left";
+		c.fillText("FPS: " + fps, 6, 16);
+		c.fillText("SCORE: " + score, 6, 32);
+		c.fillText("HISCORE: " + highScore, 6, 48);
+    }
 }
