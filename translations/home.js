@@ -9,6 +9,12 @@ const langDict = {
 		pressEscape: 'Press Escape to stop',
 		toggleSound: "Press 'M' to toggle sound effects",
 		learnHow: 'Learn how this works!',
+		load: 'the game finished loading. yay.',
+		title: 'Bad Asteroid Game',
+		author: 'by Luke Lawlor',
+		pressEnter: 'Press Enter to Play',
+		highScore: 'High Score: ',
+		pressEnterToReplay: 'Press Enter to Replay',
 	},
 	fr: {
 		gameTitle: "Mauvais jeu d'astéroïdes",
@@ -20,14 +26,42 @@ const langDict = {
 		pressEscape: 'Appuyez sur Échap pour arrêter',
 		toggleSound: "Appuyez sur 'M' pour activer/désactiver les effets sonores",
 		learnHow: 'Apprenez comment cela fonctionne !',
+		load: 'le jeu a fini de charger. Hourra.',
+		title: "Mauvais jeu d'astéroïdes",
+		author: 'par Luke Lawlor',
+		pressEnter: 'Appuyez sur Entrée pour Jouer',
+		highScore: 'Meilleur Score : ',
+		pressEnterToReplay: 'Appuyez sur Entrée pour Recommencer',
 	},
 }
 
+const GAME_TXT = {
+	load: '',
+	title: '',
+	author: '',
+	pressEnter: '',
+	highScore: '',
+	pressEnterToReplay: '',
+}
+
 document.addEventListener('DOMContentLoaded', function () {
+	const frButton = document.querySelector('button[aria-label="Change to French"]')
+	const enButton = document.querySelector('button[aria-label="Change to English"]')
+
+	frButton.addEventListener('click', () => changeLanguage('fr'))
+	enButton.addEventListener('click', () => changeLanguage('en'))
+
 	changeLanguage('en')
 })
 
 function changeLanguage(lang) {
+	GAME_TXT.load = langDict[lang].load
+	GAME_TXT.title = langDict[lang].title
+	GAME_TXT.author = langDict[lang].author
+	GAME_TXT.pressEnter = langDict[lang].pressEnter
+	GAME_TXT.highScore = langDict[lang].highScore
+	GAME_TXT.pressEnterToReplay = langDict[lang].pressEnterToReplay
+
 	for (const key in langDict[lang]) {
 		const element = document.getElementById(key)
 		if (element) {
@@ -35,3 +69,5 @@ function changeLanguage(lang) {
 		}
 	}
 }
+
+export { GAME_TXT, changeLanguage }

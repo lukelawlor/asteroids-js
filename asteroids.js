@@ -7,16 +7,18 @@ import { PLAYER } from '/src/enums/player.enum.js'
 import { SPAWN } from '/src/enums/spawn.enum.js'
 import { TEXT_COLOR } from '/src/enums/textColor.enum.js'
 
+import { GAME_TXT } from '/translations/home.js'
+
 // Services
-import { setupCanva } from './src/services/canva.service';
-import { initGameVariables } from './src/services/game.service';
-import { initInstancesParams, killInst } from './src/services/instances.service';
-import { initImages } from './src/services/image.service';
-import { initFramerateParams, updateFramerate } from './src/services/framerate.service';
-import { initStateOfKey } from './src/services/keyboard.service';
-import { oCollideWithLarger, oCollideWithSmaller } from './src/services/collider.service';
-import { drawBg } from './src/services/background.service';
-import { oDrawWrap, oWorldWrap } from './src/services/object.service';
+import { drawBg } from './src/services/background.service'
+import { setupCanva } from './src/services/canva.service'
+import { oCollideWithLarger, oCollideWithSmaller } from './src/services/collider.service'
+import { initFramerateParams, updateFramerate } from './src/services/framerate.service'
+import { initGameVariables } from './src/services/game.service'
+import { initImages } from './src/services/image.service'
+import { initInstancesParams, killInst } from './src/services/instances.service'
+import { initStateOfKey } from './src/services/keyboard.service'
+import { oDrawWrap, oWorldWrap } from './src/services/object.service'
 
 // Canvases
 let { cv, c } = setupCanva(document)
@@ -40,71 +42,71 @@ for (var i = 0; i < imagesToLoad.length; ++i) {
 }
 
 // Keyboard Input
-let { kl, kr, ku, kd, k1, k2 } = initStateOfKey();
+let { kl, kr, ku, kd, k1, k2 } = initStateOfKey()
 
 // Events
-document.addEventListener("keydown", function (e) {
+document.addEventListener('keydown', function (e) {
 	switch (e.key) {
 		case 'ArrowLeft':
 		case 'q':
-			kl = 1;
-			e.preventDefault();
-			break;
+			kl = 1
+			e.preventDefault()
+			break
 		case 'ArrowRight':
 		case 'd':
-			kr = 1;
-			e.preventDefault();
-			break;
+			kr = 1
+			e.preventDefault()
+			break
 		case 'ArrowDown':
 		case 's':
-			kd = 1;
-			e.preventDefault();
-			break;
+			kd = 1
+			e.preventDefault()
+			break
 		case 'ArrowUp':
 		case 'z':
-			ku = 1;
-			e.preventDefault();
-			break;
+			ku = 1
+			e.preventDefault()
+			break
 		case ' ':
-			k1 = 1;
-			e.preventDefault();
-			break;
+			k1 = 1
+			e.preventDefault()
+			break
 		case 'Enter':
-			k2 = 1;
-			break;
+			k2 = 1
+			break
 		case 'Escape':
-			gmEnd();
+			gmEnd()
 		case 'm':
 			toggleAudio()
 			break
 	}
-});
-document.addEventListener("keyup", function (e) {
+})
+document.addEventListener('keyup', function (e) {
 	switch (e.key) {
 		case 'ArrowLeft':
 		case 'q':
-			kl = 0;
-			break;
+			kl = 0
+			break
 		case 'ArrowRight':
 		case 'd':
-			kr = 0;
-			break;
+			kr = 0
+			break
 		case 'ArrowDown':
 		case 's':
-			kd = 0;
-			break;
+			kd = 0
+			break
 		case 'ArrowUp':
 		case 'z':
-			ku = 0;
-			break;
+			ku = 0
+			break
 		case ' ':
-			k1 = 0;
-			e.preventDefault();
-			break;
+			k1 = 0
+			e.preventDefault()
+			break
 	}
-});
+})
 
-// Set keys that don't repeat when held 
+// Set keys that don't repeat when held
 function stopKeyRepeat() {
 	k2 = 0
 }
@@ -328,12 +330,12 @@ function oTitleUD() {
 	c.textAlign = 'center'
 	c.font = '20px Courier'
 	c.fillStyle = TEXT_COLOR.GREEN
-	c.fillText('the game finished loading. yay.', GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 120)
+	c.fillText(GAME_TXT.load, GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 120)
 	c.fillStyle = TEXT_COLOR.WHITE
-	c.fillText('Bad Asteroid Game', GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 60)
+	c.fillText(GAME_TXT.title, GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 60)
 	c.fillStyle = TEXT_COLOR.GREEN
-	c.fillText('by Luke Lawlor', GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 30)
-	c.fillText('Press Enter to Play', GAME.WIDTH_HALF, GAME.HEIGHT_HALF + 20)
+	c.fillText(GAME_TXT.author, GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 30)
+	c.fillText(GAME_TXT.pressEnter, GAME.WIDTH_HALF, GAME.HEIGHT_HALF + 20)
 
 	if (k2) gmStart()
 }
@@ -345,8 +347,8 @@ function oEndUD() {
 	c.fillText('G A M E   O V E R', GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 60)
 	c.fillStyle = TEXT_COLOR.GREEN
 	c.fillText('Score: ' + score, GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 30)
-	c.fillText('High Score: ' + highScore, GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 12)
-	c.fillText('Press Enter to Replay', GAME.WIDTH_HALF, GAME.HEIGHT_HALF + 20)
+	c.fillText(GAME_TXT.highScore + highScore, GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 12)
+	c.fillText(GAME_TXT.pressEnterToReplay, GAME.WIDTH_HALF, GAME.HEIGHT_HALF + 20)
 
 	if (k2) gmStart()
 }
@@ -382,7 +384,7 @@ function gmLoop() {
 	c.clearRect(0, 0, cv.width, cv.height)
 
 	// Draw Background
-	drawBg(c, sBg1, sBg2, bxt1, byt1, bxt2, byt2);
+	drawBg(c, sBg1, sBg2, bxt1, byt1, bxt2, byt2)
 
 	// Update Instances
 	for (var i = 0; i < INSTANCES.MAX; ++i) if (inst[i] != null) inst[i].ud()
@@ -411,10 +413,10 @@ function gmLoop() {
 	c.textAlign = 'left'
 	c.fillText('FPS: ' + fps, 6, 16)
 	c.fillText('SCORE: ' + score, 6, 32)
-	c.fillText('HISCORE: ' + highScore, 6, 48)
+	c.fillText(GAME_TXT.highScore + highScore, 6, 48)
 }
 
 // Exports
 export function getInst() {
-	return inst;
+	return inst
 }
