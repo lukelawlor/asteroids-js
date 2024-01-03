@@ -311,6 +311,9 @@ function oAsteroidUD()
 	{
 		if ((--this.hp) == 0)
 		{
+			var explosionSfx = new Audio("./assets/audio/explosion.mp3");
+			explosionSfx.volume = 0.1;
+			explosionSfx.play();
 			++score;
 			killInst(this);
 		}
