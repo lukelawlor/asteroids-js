@@ -1,582 +1,427 @@
-// Constants
-const GAME_WIDTH = 800;
-const GAME_HEIGHT = 600;
-const GAME_WIDTH_HALF = GAME_WIDTH / 2;
-const GAME_HEIGHT_HALF = GAME_HEIGHT / 2;
+// Enums
+import { AUDIO } from './src/enums/audio.enum'
+import { ALERT } from '/src/enums/alert.enum.js'
+import { GAME } from '/src/enums/game.enum.js'
+import { INSTANCES } from '/src/enums/instances.enum.js'
+import { PLAYER } from '/src/enums/player.enum.js'
+import { SPAWN } from '/src/enums/spawn.enum.js'
+import { TEXT_COLOR } from '/src/enums/textColor.enum.js'
 
-const MAX_INSTANCES = 500; 
+import { GAME_TXT } from '/translations/home.js'
 
-const PLAYER_FORCE_COUNT = 80;
-const PLAYER_SPEED_FORCE = 0.06;
-const PLAYER_SPEED_TURN = 0.06;
-const PLAYER_SPEED_BULLET = 10;
-
-const ALERT_FRAMES = 8;
-const ALERT_DURATION = 110;
-
-const SPAWN_TIME_START = 240;
-const SPAWN_TIME_DEC = 10;
-const SPAWN_TIME_MIN = 50;
-
-const TEXT_COLOR_WHITE = "#ffffff";
-const TEXT_COLOR_GREEN = "#88ff88";
+// Services
+import { drawBg } from './src/services/background.service'
+import { setupCanva } from './src/services/canva.service'
+import { oCollideWithLarger, oCollideWithSmaller } from './src/services/collider.service'
+import { initGameVariables } from './src/services/game.service'
+import { initImages } from './src/services/image.service'
+import { initInstancesParams, killInst } from './src/services/instances.service'
+import { initStateOfKey } from './src/services/keyboard.service'
+import { oDrawWrap, oWorldWrap } from './src/services/object.service'
 
 // Canvases
-var cv = document.getElementById("can");
-cv.width = GAME_WIDTH;
-cv.height = GAME_HEIGHT;
-var c = cv.getContext("2d", {alpha: false});
-c.imageSmoothingEnabled = false;
-c.fillStyle = "#ffffff";
+let { cv, c } = setupCanva(document)
 
 // Global Game Variables
-var spawning = false;
-var spawnTimeReset = SPAWN_TIME_START;
-var spawnTime = spawnTimeReset;
-var score = 0;
-var highScore = 0;
-var bxt1 = 0;
-var byt1 = 0;
-var bxt2 = 0;
-var byt2 = 0;
+let { spawning, spawnTimeReset, spawnTime, score, highScore, bxt1, bxt2, byt1, byt2 } = initGameVariables()
 
 // Instances
-var inst = new Array(MAX_INSTANCES);
-var instNext = 0;
+let { inst, instNext } = initInstancesParams()
 
 // [I] Images
-var sSpaceship = new Image(); sSpaceship.src = "ship.png";
-var sBullet = new Image(); sBullet.src = "bullet.png";
-var sAsteroid = new Image(); sAsteroid.src = "asteroid.png";
-var sAlert1 = new Image(); sAlert1.src = "alert1.png";
-var sAlert2 = new Image(); sAlert2.src = "alert2.png";
-var sBg1 = new Image(); sBg1.src = "bg1.png";
-var sBg2 = new Image(); sBg2.src = "bg2.png";
+let { sSpaceship, sBullet, sAsteroid, sAlert1, sAlert2, sBg1, sBg2, imagesLoaded, imagesNeeded, imagesToLoad } =
+	initImages()
 
-var imagesLoaded = 0;
-var imagesNeeded = 7;
-var imagesToLoad = [sSpaceship, sBullet, sAsteroid, sAlert1, sAlert2, sBg1, sBg2];
-
-function imageLoaded()
-{
-	if ((++imagesLoaded) >= imagesNeeded)
-		gmTitle();
+function imageLoaded() {
+	if (++imagesLoaded >= imagesNeeded) gmTitle()
 }
 
-for (var i = 0; i < imagesToLoad.length; ++i)
-{
-	imagesToLoad[i].onload = imageLoaded;
+for (var i = 0; i < imagesToLoad.length; ++i) {
+	imagesToLoad[i].onload = imageLoaded
 }
 
 // Keyboard Input
-var kl = 0, kr = 0, ku = 0, kd = 0, k1 = 0, k2 = 0;
+let { kl, kr, ku, kd, k1, k2 } = initStateOfKey()
 
-// Listen for keyboard input
-document.addEventListener("keydown", function(e)
-{
-	switch (e.keyCode)
-	{
-		case 37:{kl=1;e.preventDefault();break;}
-		case 39:{kr=1;e.preventDefault();break;}
-		case 40:{kd=1;e.preventDefault();break;}
-		case 38:{ku=1;e.preventDefault();break;}
-		
-		case 90:{k1=1;break;}
-		case 13:{k2=1;break;}
+// Events
+document.addEventListener('keydown', function (e) {
+	switch (e.key) {
+		case 'ArrowLeft':
+		case 'q':
+			kl = 1
+			e.preventDefault()
+			break
+		case 'ArrowRight':
+		case 'd':
+			kr = 1
+			e.preventDefault()
+			break
+		case 'ArrowDown':
+		case 's':
+			kd = 1
+			e.preventDefault()
+			break
+		case 'ArrowUp':
+		case 'z':
+			ku = 1
+			e.preventDefault()
+			break
+		case ' ':
+			k1 = 1
+			e.preventDefault()
+			break
+		case 'Enter':
+			k2 = 1
+			break
+		case 'Escape':
+			gmEnd()
+		case 'm':
+			toggleAudio()
+			break
 	}
-});
-document.addEventListener("keyup", function(e)
-{
-	switch (e.keyCode)
-	{
-		case 37:{kl=0;break;}
-		case 39:{kr=0;break;}
-		case 40:{kd=0;break;}
-		case 38:{ku=0;break;}
-
-		case 90:{k1=0;break;}
+})
+document.addEventListener('keyup', function (e) {
+	switch (e.key) {
+		case 'ArrowLeft':
+		case 'q':
+			kl = 0
+			break
+		case 'ArrowRight':
+		case 'd':
+			kr = 0
+			break
+		case 'ArrowDown':
+		case 's':
+			kd = 0
+			break
+		case 'ArrowUp':
+		case 'z':
+			ku = 0
+			break
+		case ' ':
+			k1 = 0
+			e.preventDefault()
+			break
 	}
-});
+})
 
-// Set keys that don't repeat when held 
-function stopKeyRepeat()
-{
-	k2 = 0;
+// Set keys that don't repeat when held
+function stopKeyRepeat() {
+	k2 = 0
+}
+
+// Disable audio
+function toggleAudio() {
+	AUDIO.ENABLED = !AUDIO.ENABLED
 }
 
 // Framerate
-var frameLast = Date.now();
-var frameNow = frameLast;
-var fps = 0;
+var frameLast = Date.now()
+var frameNow = frameLast
+var fps = 0
 
-function updateFramerate()
-{
-	frameNow = Date.now();
-	fps = Math.round(1000 / (frameNow - frameLast));
-	frameLast = frameNow;
+function updateFramerate() {
+	frameNow = Date.now()
+	fps = Math.round(1000 / (frameNow - frameLast))
+	frameLast = frameNow
 }
 
 // Game Objects
-function makeInst(x, y, o)
-{
+function makeInst(x, y, o) {
 	// Skip past instance indexes that are full or have persistent objects
-	while (inst[instNext] != null && inst[instNext].ps != null)
-	{
-		if ((++instNext) >= MAX_INSTANCES)
-			instNext = 0;
+	while (inst[instNext] != null && inst[instNext].ps != null) {
+		if (++instNext >= INSTANCES.MAX) instNext = 0
 	}
-	
-	// Add instance to instance array
-	inst[instNext] = this;
-	this.id = instNext;
 
-	if ((++instNext) >= MAX_INSTANCES)
-		instNext = 0;
+	// Add instance to instance array
+	inst[instNext] = this
+	this.id = instNext
+
+	if (++instNext >= INSTANCES.MAX) instNext = 0
 
 	// Set x & y position
-	this.x = x;
-	this.y = y;
+	this.x = x
+	this.y = y
 
-	this.o = o;
-	
+	this.o = o
+
 	// Execute object constructor
-	switch (o)
-	{
-		case 0:
-		{
-			this.xforces = new Array(PLAYER_FORCE_COUNT).fill(0);
-			this.yforces = new Array(PLAYER_FORCE_COUNT).fill(0);
-			this.force = 0;
-			this.forceSpeed = PLAYER_SPEED_FORCE;
-			this.turnSpeed = PLAYER_SPEED_TURN;
-			this.bulletSpeed = PLAYER_SPEED_BULLET;
-			this.shootCooldownReset = 10;
-			this.shootCooldown = 0;
-			this.dir = 0;
-			this.w = sSpaceship.width;
-			this.h = sSpaceship.height;
-			
-			this.worldWrap = oWorldWrap;
-			this.shoot = oSpaceshipShoot;
-			this.draw = oSpaceshipDraw;
-			this.drawWrap = oDrawWrap;
-			this.hit = oCollideWithLarger;
+	switch (o) {
+		case 0: {
+			this.xforces = new Array(PLAYER.FORCE_COUNT).fill(0)
+			this.yforces = new Array(PLAYER.FORCE_COUNT).fill(0)
+			this.force = 0
+			this.forceSpeed = PLAYER.SPEED_FORCE
+			this.turnSpeed = PLAYER.SPEED_TURN
+			this.bulletSpeed = PLAYER.SPEED_BULLET
+			this.shootCooldownReset = 10
+			this.shootCooldown = 0
+			this.dir = 0
+			this.w = sSpaceship.width
+			this.h = sSpaceship.height
 
-			this.ps = true;
-			this.ud = oSpaceshipUD;
-			break;
+			this.worldWrap = oWorldWrap
+			this.shoot = oSpaceshipShoot
+			this.draw = oSpaceshipDraw
+			this.drawWrap = oDrawWrap
+			this.hit = oCollideWithLarger
+
+			this.ps = true
+			this.ud = oSpaceshipUD
+			break
 		}
-		case 1:
-		{
-			this.hsp = 0;
-			this.vsp = 0;
+		case 1: {
+			this.hsp = 0
+			this.vsp = 0
 
-			this.ud = oBulletUD;
-			break;
+			this.ud = oBulletUD
+			break
 		}
-		case 2:
-		{
-			var speed = 2, dir = Math.random() * (Math.PI * 2);
-			this.hsp = Math.cos(dir) * speed;
-			this.vsp = Math.sin(dir) * speed;
-			this.hp = 5;
+		case 2: {
+			var speed = 2,
+				dir = Math.random() * (Math.PI * 2)
+			this.hsp = Math.cos(dir) * speed
+			this.vsp = Math.sin(dir) * speed
+			this.hp = 5
 
-			this.halfWidth = sAsteroid.width / 2;
-			this.halfHeight = sAsteroid.height / 2;
+			this.halfWidth = sAsteroid.width / 2
+			this.halfHeight = sAsteroid.height / 2
 
-			this.worldWrap = oWorldWrap;
-			this.draw = oAsteroidDraw;
-			this.drawWrap = oDrawWrap;
-			this.hit = oCollideWithSmaller;
+			this.worldWrap = oWorldWrap
+			this.draw = oAsteroidDraw
+			this.drawWrap = oDrawWrap
+			this.hit = oCollideWithSmaller
 
-			this.ps = true;
-			this.ud = oAsteroidUD;
-			break;
+			this.ps = true
+			this.ud = oAsteroidUD
+			break
 		}
-		case 3:
-		{
-			this.frame1 = true;
-			this.frames = ALERT_FRAMES;
-			this.dur = ALERT_DURATION;
+		case 3: {
+			this.frame1 = true
+			this.frames = ALERT.FRAMES
+			this.dur = ALERT.DURATION
 
-			this.ud = oAlertUD;
-			break;
+			this.ud = oAlertUD
+			break
 		}
-		case 4:
-		{
-			this.ud = oTitleUD;
-			break;
+		case 4: {
+			this.ud = oTitleUD
+			break
 		}
-		case 5:
-		{
-			this.ud = oEndUD;
-			break;
-		}	
-	}	
-}
-function killInst(o)
-{
-	inst[o.id] = null;
+		case 5: {
+			this.ud = oEndUD
+			break
+		}
+	}
 }
 
 // [O] Objects
-function oSpaceshipUD()
-{
+function oSpaceshipUD() {
 	// Checking if hit by something
-	if (this.hit(2, this.x - 10, this.y - 10, 20, 20, -20, -20, 40, 40) != null)
-	{
-		killInst(this);
-		gmEnd();
+	if (this.hit(2, this.x - 10, this.y - 10, 20, 20, -20, -20, 40, 40) != null) {
+		if (AUDIO.ENABLED) new Audio(AUDIO.EXPLOSION).play()
+		killInst(inst, this)
+		gmEnd()
 	}
 
 	// Turn ship
-	this.dir += (kr - kl) * this.turnSpeed;
-	
-	// Move ship 
-	if (ku)
-	{
-		this.xforces[this.force] = Math.cos(this.dir) * this.forceSpeed;
-		this.yforces[this.force] = Math.sin(this.dir) * this.forceSpeed;
-		
-		++this.force;
-		if (this.force >= PLAYER_FORCE_COUNT)
-			this.force = 0;
+	this.dir += (kr - kl) * this.turnSpeed
+
+	// Move ship
+	if (ku) {
+		this.xforces[this.force] = Math.cos(this.dir) * this.forceSpeed
+		this.yforces[this.force] = Math.sin(this.dir) * this.forceSpeed
+
+		++this.force
+		if (this.force >= PLAYER.FORCE_COUNT) this.force = 0
+	}
+	if (kd) {
+		this.xforces[this.force] = -Math.cos(this.dir) * this.forceSpeed
+		this.yforces[this.force] = -Math.sin(this.dir) * this.forceSpeed
+
+		++this.force
+		if (this.force >= PLAYER.FORCE_COUNT) this.force = 0
 	}
 
-	// Apply movement	
-	for (var i = 0; i < PLAYER_FORCE_COUNT; ++i)
-	{
-		this.x += this.xforces[i];
-		this.y += this.yforces[i];
+	// Apply movement
+	for (var i = 0; i < PLAYER.FORCE_COUNT; ++i) {
+		this.x += this.xforces[i]
+		this.y += this.yforces[i]
 	}
 
 	// Wrap around world
-	this.worldWrap();	
+	this.worldWrap()
 
 	// Shooting
-	if (this.shootCooldown == 0)
-	{
-		if (k1)
-		{
-			this.shoot();
-			this.shootCooldown = this.shootCooldownReset;
+	if (this.shootCooldown == 0) {
+		if (k1) {
+			if (AUDIO.ENABLED) new Audio(AUDIO.SHOOT).play()
+			this.shoot()
+			this.shootCooldown = this.shootCooldownReset
 		}
-	}
-	else
-	{
-		--this.shootCooldown;
-		if (!k1)
-			this.shootCooldown = 0;
+	} else {
+		--this.shootCooldown
+		if (!k1) this.shootCooldown = 0
 	}
 
 	// Draw
-	this.drawWrap();
+	this.drawWrap()
 }
-function oSpaceshipShoot()
-{
-	var bullet = new makeInst(this.x, this.y, 1);
-	bullet.hsp = Math.cos(this.dir) * this.bulletSpeed;
-	bullet.vsp = Math.sin(this.dir) * this.bulletSpeed;
+
+function oSpaceshipShoot() {
+	var bullet = new makeInst(this.x, this.y, 1)
+	bullet.hsp = Math.cos(this.dir) * this.bulletSpeed
+	bullet.vsp = Math.sin(this.dir) * this.bulletSpeed
 }
-function oSpaceshipDraw(x, y)
-{
-	c.save();
-	c.translate(x, y);
-	c.rotate(this.dir);
-	c.drawImage(sSpaceship, -this.w / 2, -this.h / 2);
-	c.restore();
+
+function oSpaceshipDraw(x, y) {
+	c.save()
+	c.translate(x, y)
+	c.rotate(this.dir)
+	c.drawImage(sSpaceship, -this.w / 2, -this.h / 2)
+	c.restore()
 }
-function oBulletUD()
-{
-	this.x += this.hsp;
-	this.y += this.vsp;
-	c.drawImage(sBullet, this.x, this.y);
+
+function oBulletUD() {
+	this.x += this.hsp
+	this.y += this.vsp
+	c.drawImage(sBullet, this.x, this.y)
 }
-function oAsteroidUD()
-{
+
+function oAsteroidUD() {
 	// Move
-	this.x += this.hsp;
-	this.y += this.vsp;
+	this.x += this.hsp
+	this.y += this.vsp
 
 	// Wrap around world
-	this.worldWrap();
+	this.worldWrap()
 
 	// Check for collision with a bullet
-	var hitby;
-	if ((hitby = this.hit(1, this.x - this.halfWidth, this.y - this.halfHeight, 64, 64, 0, 0, 10, 10)) != null)
-	{
-		if ((--this.hp) == 0)
-		{
-			++score;
-			killInst(this);
+	var hitby
+	if ((hitby = this.hit(1, this.x - this.halfWidth, this.y - this.halfHeight, 64, 64, 0, 0, 10, 10)) != null) {
+		if (--this.hp == 0) {
+			++score
+			killInst(inst, this)
 		}
-		killInst(hitby);
+		if (AUDIO.ENABLED) new Audio(AUDIO.HIT).play()
+		killInst(inst, hitby)
 	}
 
 	// Draw
-	this.drawWrap();
+	this.drawWrap()
 }
-function oAsteroidDraw(x, y)
-{
-	c.drawImage(sAsteroid, x - this.halfWidth, y - this.halfHeight);
+
+function oAsteroidDraw(x, y) {
+	c.drawImage(sAsteroid, x - this.halfWidth, y - this.halfHeight)
 }
-function oAlertUD()
-{
+function oAlertUD() {
 	// Duration
-	if ((--this.dur) == 0)
-	{
+	if (--this.dur == 0) {
 		// Spawn an asteroid, then delete self
-		new makeInst(this.x, this.y, 2);
-		killInst(this);
+		new makeInst(this.x, this.y, 2)
+		killInst(inst, this)
 	}
 
 	// Animation
-	if ((--this.frames) == 0)
-	{
-		this.frames = ALERT_FRAMES;
-		this.frame1 = !this.frame1;
+	if (--this.frames == 0) {
+		this.frames = ALERT.FRAMES
+		this.frame1 = !this.frame1
 	}
 
 	// Drawing
-	c.drawImage(this.frame1 ? sAlert1 : sAlert2, this.x, this.y);
+	c.drawImage(this.frame1 ? sAlert1 : sAlert2, this.x, this.y)
 }
-function oTitleUD()
-{
-	c.textAlign = "center";
-	c.font = "20px Courier";
-	c.fillStyle = TEXT_COLOR_GREEN;
-	c.fillText("the game finished loading. yay.", GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 120);
-	c.fillStyle = TEXT_COLOR_WHITE;
-	c.fillText("Bad Asteroid Game", GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 60);
-	c.fillStyle = TEXT_COLOR_GREEN;
-	c.fillText("by Luke Lawlor", GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 30);
-	c.fillText("Press Enter to Play", GAME_WIDTH_HALF, GAME_HEIGHT_HALF + 20);
+function oTitleUD() {
+	c.textAlign = 'center'
+	c.font = '20px Courier'
+	c.fillStyle = TEXT_COLOR.GREEN
+	c.fillText(GAME_TXT.load, GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 120)
+	c.fillStyle = TEXT_COLOR.WHITE
+	c.fillText(GAME_TXT.title, GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 60)
+	c.fillStyle = TEXT_COLOR.GREEN
+	c.fillText(GAME_TXT.author, GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 30)
+	c.fillText(GAME_TXT.pressEnter, GAME.WIDTH_HALF, GAME.HEIGHT_HALF + 20)
 
-	if (k2)
-		gmStart();
-}
-function oEndUD()
-{
-	c.textAlign = "center";
-	c.font = "20px Courier";
-	c.fillStyle = TEXT_COLOR_WHITE;
-	c.fillText("G A M E   O V E R", GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 60);
-	c.fillStyle = TEXT_COLOR_GREEN;
-	c.fillText("Score: " + score, GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 30);
-	c.fillText("High Score: " + highScore, GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 12);
-	c.fillText("Press Enter to Replay", GAME_WIDTH_HALF, GAME_HEIGHT_HALF + 20);
-
-	if (k2)
-		gmStart();
+	if (k2) gmStart()
 }
 
-// General Object Functions
-function oWorldWrap()
-{
-	if (this.x > GAME_WIDTH)
-		this.x = GAME_WIDTH - this.x;
-	else if (this.x < 0)
-		this.x = GAME_WIDTH + this.x;
-	
-	if (this.y > GAME_HEIGHT)
-		this.y = GAME_HEIGHT - this.y; 
-	else if (this.y < 0)
-		this.y = GAME_HEIGHT + this.y;
-}
+function oEndUD() {
+	c.textAlign = 'center'
+	c.font = '20px Courier'
+	c.fillStyle = TEXT_COLOR.WHITE
+	c.fillText('G A M E   O V E R', GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 60)
+	c.fillStyle = TEXT_COLOR.GREEN
+	c.fillText('Score: ' + score, GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 30)
+	c.fillText(GAME_TXT.highScore + highScore, GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 12)
+	c.fillText(GAME_TXT.pressEnterToReplay, GAME.WIDTH_HALF, GAME.HEIGHT_HALF + 20)
 
-// Draw an object normally, and as it wraps across the screen
-// Precondition: object has a draw() function
-function oDrawWrap()
-{
-	var xstop = this.x + GAME_WIDTH;
-	var ystop = this.y + GAME_HEIGHT;
-
-	for (var x = this.x - GAME_WIDTH - 1; x <= xstop; x += GAME_WIDTH)
-	{
-		for (var y = this.y - GAME_HEIGHT - 1; y <= ystop; y += GAME_HEIGHT)
-		{
-			this.draw(x, y);
-		}
-	}
-}
-
-function oCollideWithLarger(o, x1, y1, w1, h1, s1, s2, w2, h2)
-{	
-	var other; 
-	for (var i = 0; i < MAX_INSTANCES; ++i)
-	{
-		other = inst[i];
-		if (other != null && other.o == o)
-		{
-			if (checkRect(x1, y1, w1, h1, other.x + s1, other.y + s2, w2, h2))
-				return other;
-		}
-	}
-	return null;
-}
-
-function oCollideWithSmaller(o, x1, y1, w1, h1, s1, s2, w2, h2)
-{	
-	var other; 
-	for (var i = 0; i < MAX_INSTANCES; ++i)
-	{
-		other = inst[i];
-		if (other != null && other.o == o)
-		{
-			if (checkRect(other.x + s1, other.y + s2, w2, h2, x1, y1, w1, h1))
-				return other;
-		}
-	}
-	return null;
-}
-
-// Check for a collision between two rectangles
-// Pass the variables for the smaller rectangle first
-function checkRect(x1,y1,w1,h1,x2,y2,w2,h2)
-{
-	var x12 = x1 + w1;
-	var y12 = y1 + h1;
-	var x22 = x2 + w2;
-	var y22 = y2 + h2;
-
-	if (x1 >= x2 && x1 <= x22)
-	{
-		//Left Side Hit
-		if (y1 >= y2 && y1 <= y22)
-		{
-			//Top Side Hit
-			return true;
-		}
-		if (y12 >= y2 && y12 <= y22)
-		{
-			// Bottom Side Hit
-			return true;
-		}
-	}
-	else if (x12 >= x2 && x12 <= x22)
-	{
-		// Right Side Hit
-		if (y1 >= y2 && y1 <= y22)
-		{
-			//Top Side Hit
-			return true;
-		}
-		if (y12 >= y2 && y12 <= y22)
-		{
-			// Bottom Side Hit
-			return true;
-		}
-	}
-	return false;
-}
-
-// Background
-function drawBg()
-{
-	// Vars
-	var bw1 = sBg1.width;
-	var bh1 = sBg1.height;
-	var bw2 = sBg1.width;
-	var bh2 = sBg1.height;
-
-	// Increase ticks
-	if ((bxt1 += 0.3) > bw1)
-		bxt1 = 0;
-	if ((byt1 += 0.1) > bh1)
-		byt1 = 0;
-
-	if ((bxt2 += 0.2) > bw2)
-		bxt2 = 0;
-	if ((byt2 += 0.05) > bh2)
-		byt2 = 0;
-
-	// Draw
-	for (var x = -bw2 + bxt2; x < GAME_WIDTH + bw2; x += bw2)
-	{
-		for (var y = -bh2 + byt2; y < GAME_HEIGHT + bh2; y += bh2)
-		{
-			c.drawImage(sBg2, x, y);
-		}
-	}
-
-	for (var x = -bw1 + bxt1; x < GAME_WIDTH + bw1; x += bw1)
-	{
-		for (var y = -bh1 + byt1; y < GAME_HEIGHT + bh1; y += bh1)
-		{
-			c.drawImage(sBg1, x, y);
-		}
-	}
-
+	if (k2) gmStart()
 }
 
 // Game Functions
-function gmTitle()
-{
-	new makeInst(0, 0, 4);
-	gmLoop();
+function gmTitle() {
+	new makeInst(0, 0, 4)
+	gmLoop()
 }
 
-function gmStart()
-{
-	inst.fill(null);
-	spawning = true;
-	spawnTimeReset = SPAWN_TIME_START;
-	spawnTime = 10;
-	score = 0;
-	new makeInst(100, 80, 0);
+function gmStart() {
+	inst.fill(null)
+	spawning = true
+	spawnTimeReset = SPAWN.TIME_START
+	spawnTime = 10
+	score = 0
+	new makeInst(100, 80, 0)
 }
 
-function gmEnd()
-{
-	if (score > highScore)
-		highScore = score;
-	inst.fill(null);
-	spawning = false;
-	new makeInst(0, 0, 5);
+function gmEnd() {
+	if (score > highScore) highScore = score
+	inst.fill(null)
+	spawning = false
+	new makeInst(0, 0, 5)
 }
 
 // Game Loop
-function gmLoop()
-{
+function gmLoop() {
 	// Request another frame
-	requestAnimationFrame(gmLoop);
+	requestAnimationFrame(gmLoop)
 
 	// Clear Screen
-	c.clearRect(0,0,cv.width,cv.height);	
+	c.clearRect(0, 0, cv.width, cv.height)
 
 	// Draw Background
-	drawBg();
-	
+	drawBg(c, sBg1, sBg2, bxt1, byt1, bxt2, byt2)
+
 	// Update Instances
-	for (var i = 0; i < MAX_INSTANCES; ++i)
-		if (inst[i] != null)
-			inst[i].ud();
-	
+	for (var i = 0; i < INSTANCES.MAX; ++i) if (inst[i] != null) inst[i].ud()
+
 	// Spawn Asteroids
-	if (spawning && (--spawnTime) <= 0)
-	{
+	if (spawning && --spawnTime <= 0) {
 		// Spawn Asteroid
-		var x = Math.random() * GAME_WIDTH;
-		var y = Math.random() * GAME_HEIGHT;
-		new makeInst(x, y, 3);
+		var x = Math.random() * GAME.WIDTH
+		var y = Math.random() * GAME.HEIGHT
+		new makeInst(x, y, 3)
 
 		// Reset Spawn Time
-		spawnTimeReset -= SPAWN_TIME_DEC;
-		if (spawnTimeReset < SPAWN_TIME_MIN)
-			spawnTimeReset = SPAWN_TIME_MIN;
-		spawnTime = spawnTimeReset;
+		spawnTimeReset -= SPAWN.TIME_DEC
+		if (spawnTimeReset < SPAWN.TIME_MIN) spawnTimeReset = SPAWN.TIME_MIN
+		spawnTime = spawnTimeReset
 	}
-	
+
 	// Keyboard Input
-	stopKeyRepeat();
+	stopKeyRepeat()
 
 	// Show Framerate & Score
-	updateFramerate();
+	updateFramerate()
 
-	c.fillStyle = TEXT_COLOR_GREEN;
-	c.font = "16px Courier";
-	c.textAlign = "left";
-	c.fillText("FPS: " + fps, 6, 16);
-	c.fillText("SCORE: " + score, 6, 32);
-	c.fillText("HISCORE: " + highScore, 6, 48);
+	c.fillStyle = TEXT_COLOR.GREEN
+	c.font = '16px Courier'
+	c.textAlign = 'left'
+	c.fillText('FPS: ' + fps, 6, 16)
+	c.fillText('SCORE: ' + score, 6, 32)
+	c.fillText(GAME_TXT.highScore + highScore, 6, 48)
+}
+
+// Exports
+export function getInst() {
+	return inst
 }

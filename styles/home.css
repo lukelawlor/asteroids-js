@@ -1,0 +1,122 @@
+body {
+	background-color: #001145;
+	color: #ffffff;
+	background-image: url('/images/pagebg.png');
+	font-family: 'Arial', sans-serif;
+	margin: 0;
+}
+
+#content {
+	text-align: center;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+#can {
+	border: 1px solid #0000ff;
+	max-width: 100%;
+	height: auto;
+}
+
+.game-container {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.game-controls {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+}
+
+.language-buttons,
+.development-tools {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.language-buttons {
+	margin-bottom: 10px;
+}
+
+.instructions h4,
+.development-tools img {
+	margin: 10px;
+}
+
+a {
+	color: #88ff88;
+	text-decoration: none;
+}
+
+a:hover,
+a:active {
+	color: #ffffff;
+}
+
+/* Responsive Design */
+@media only screen and (max-width: 1024px) {
+	.game-container {
+		flex-direction: column;
+	}
+
+	.development-tools {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.language-buttons {
+		flex-direction: row;
+	}
+
+	.instructions h4 {
+		text-align: center;
+	}
+
+	.language-buttons button img,
+	.development-tools img {
+		width: 50px;
+		height: auto;
+	}
+
+	#can {
+		width: 100%;
+		max-height: 300px;
+	}
+}
+
+@media only screen and (max-width: 768px) {
+	.instructions h4 {
+		font-size: smaller;
+	}
+
+	.language-buttons button img,
+	.development-tools img {
+		width: 50px;
+		height: auto;
+	}
+
+	#can {
+		width: 100%;
+		max-height: 300px;
+	}
+}
+
+@media only screen and (max-width: 600px) {
+	.game-container {
+		flex-direction: column;
+	}
+
+	.development-tools {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.instructions h4 {
+		text-align: center;
+	}
+}

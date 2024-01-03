@@ -1,45 +1,73 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title>Coding Club Project</title>
-		<style>
-			body{
-				background-color: #001145;
-				color: #ffffff;
-				background-image: url(pagebg.png);
-			}
-			#content{
-				text-align: center;
-			}
-			#can{
-				border: 1px solid #0000ff;
-			}
-			.vr{ height: 12px; }
-			.vr-big{ height: 80px; }
-			a{ color: #88ff88; }
-			a:hover{ color: #ffffff; }
-			a:active{ color: #88ff88; }
-		</style>
-	</head>
-<body>
-	<div id="content">
-		<h1>Bad Asteroid Game</h1>
-		<h4>made from scratch (582 lines of JavaScript)</h4>
-		<h4>All code, gfx, and audio by me, Finished Apr 10, 2022</h4>
-		<h4>actually I ran out of time to add audio so scratch that last part</h4>
-		<canvas id="can" width="0" height="0">
-			Your browser does not support the HTML5 canvas.
-		</canvas>
-		<div class="vr"></div>
-		<h4>Left and Right to Turn, Up to Move, Z to Shoot</h4>
-		<div class="vr"></div>
-		<h2><a href="doc.html">Learn how this works!</a></h2>
-		<div class="vr-big"></div>
-		<img src="vim.gif"><img src="linux.gif"><img src="firefox.gif">
-		<br>
-		<small>developed with Vim under Linux, tested on Firefox (the right way)</small>
-	</div>
-<script src="asteroids.js"></script>
-</body>
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+          content="Asteroids game made from scratch in JavaScript" />
+    <meta name="keywords"
+          content="asteroids, game, javascript, js, html, css, vim, linux, firefox" />
+    <link rel="icon"
+          href="/asteroids_16.png" />
+    <link rel="stylesheet"
+          href="./styles/home.css" />
+    <title>Coding Club Project</title>
+  </head>
+
+  <body>
+    <div id="content">
+      <header>
+        <h1 id="gameTitle"></h1>
+      </header>
+
+      <div class="game-container">
+        <div class="game-controls">
+          <div class="instructions">
+            <h4 id="turnLeft"></h4>
+            <h4 id="moveUp"></h4>
+            <h4 id="brakeDown"></h4>
+            <h4 id="spaceShoot"></h4>
+            <h4 id="pressEnter"></h4>
+            <h4 id="pressEscape"></h4>
+            <h4 id="toggleSound"></h4>
+            <a href="doc.html"
+               id="learnHow"></a>
+          </div>
+          <div class="language-buttons">
+            <button aria-label="Change to French">
+              <img src="/images/fr.png"
+                   alt="French Flag">
+            </button>
+            <button aria-label="Change to English">
+              <img src="/images/en.png"
+                   alt="English Flag">
+            </button>
+          </div>
+        </div>
+
+        <canvas id="can"
+                width="0"
+                height="0">Your browser does not support the HTML5 canvas.</canvas>
+      </div>
+
+      <footer>
+        <div class="development-tools">
+          <img src="/gif/vim.gif"
+               alt="Vim Editor">
+          <img src="/gif/linux.gif"
+               alt="Linux OS">
+          <img src="/gif/firefox.gif"
+               alt="Firefox Browser">
+        </div>
+      </footer>
+    </div>
+
+    <script type="module"
+            src="./asteroids.js"></script>
+    <script type="module"
+            src="./translations/home.js"></script>
+  </body>
+
 </html>
