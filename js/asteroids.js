@@ -45,13 +45,13 @@ var inst = new Array(MAX_INSTANCES);
 var instNext = 0;
 
 // [I] Images
-var sSpaceship = new Image(); sSpaceship.src = "ship.png";
-var sBullet = new Image(); sBullet.src = "bullet.png";
-var sAsteroid = new Image(); sAsteroid.src = "asteroid.png";
-var sAlert1 = new Image(); sAlert1.src = "alert1.png";
-var sAlert2 = new Image(); sAlert2.src = "alert2.png";
-var sBg1 = new Image(); sBg1.src = "bg1.png";
-var sBg2 = new Image(); sBg2.src = "bg2.png";
+var sSpaceship = new Image(); sSpaceship.src = "./assets/images/ship.png";
+var sBullet = new Image(); sBullet.src = "./assets/images/bullet.png";
+var sAsteroid = new Image(); sAsteroid.src = "./assets/images/asteroid.png";
+var sAlert1 = new Image(); sAlert1.src = "./assets/images/alert1.png";
+var sAlert2 = new Image(); sAlert2.src = "./assets/images/alert2.png";
+var sBg1 = new Image(); sBg1.src = "./assets/images/bg1.png";
+var sBg2 = new Image(); sBg2.src = "./assets/images/bg2.png";
 
 var imagesLoaded = 0;
 var imagesNeeded = 7;

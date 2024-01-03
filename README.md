@@ -2,7 +2,7 @@
 
 This is an asteroids clone I wrote in JavaScript for my school's coding club officer application. I made it in my free time over the course of 3-4 days and it uses the HTML5 canvas for drawing.
 
-![in-game screenshot](screenshot.png)
+![in-game screenshot](./assets/images/screenshot.png)
 
 In the game, you use the arrow keys to turn and accelerate your ship and the Z key to shoot.
 
