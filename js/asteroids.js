@@ -21,6 +21,8 @@ const SPAWN_TIME_MIN = 50;
 const TEXT_COLOR_WHITE = "#ffffff";
 const TEXT_COLOR_GREEN = "#88ff88";
 
+let IS_FR = false;
+
 // Canvases
 var cv = document.getElementById("can");
 cv.width = GAME_WIDTH;
@@ -354,12 +356,12 @@ function oTitleUD()
 	c.textAlign = "center";
 	c.font = "20px Courier";
 	c.fillStyle = TEXT_COLOR_GREEN;
-	c.fillText("the game finished loading. yay.", GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 120);
+	c.fillText(IS_FR ? "Le jeu a finit de charger" : "the game finished loading. yay.", GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 120);
 	c.fillStyle = TEXT_COLOR_WHITE;
-	c.fillText("Bad Asteroid Game", GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 60);
+	c.fillText(IS_FR ? "Mauvais Jeu d'Astéroïdes" : "Bad Asteroid Game", GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 60);
 	c.fillStyle = TEXT_COLOR_GREEN;
-	c.fillText("by Luke Lawlor", GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 30);
-	c.fillText("Press Enter to Play", GAME_WIDTH_HALF, GAME_HEIGHT_HALF + 20);
+	c.fillText(IS_FR ? "par Luke Lawlor" : "by Luke Lawlor", GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 30);
+	c.fillText(IS_FR ? "Appuyer sur Entrer pour Jouer" :"Press Enter to Play", GAME_WIDTH_HALF, GAME_HEIGHT_HALF + 20);
 
 	if (k2)
 		gmStart();
@@ -369,11 +371,11 @@ function oEndUD()
 	c.textAlign = "center";
 	c.font = "20px Courier";
 	c.fillStyle = TEXT_COLOR_WHITE;
-	c.fillText("G A M E   O V E R", GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 60);
+	c.fillText(IS_FR ? "P E R D U" : "G A M E   O V E R", GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 60);
 	c.fillStyle = TEXT_COLOR_GREEN;
 	c.fillText("Score: " + score, GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 30);
-	c.fillText("High Score: " + highScore, GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 12);
-	c.fillText("Press Enter to Replay", GAME_WIDTH_HALF, GAME_HEIGHT_HALF + 20);
+	c.fillText(IS_FR ? "Meilleur Score" : "High Score: " + highScore, GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 12);
+	c.fillText(IS_FR ? "Appuyer sur Entrer pour Jouer" : "Press Enter to Replay", GAME_WIDTH_HALF, GAME_HEIGHT_HALF + 20);
 
 	if (k2)
 		gmStart();
@@ -589,3 +591,31 @@ function gmLoop()
 	c.fillText("SCORE: " + score, 6, 32);
 	c.fillText("HISCORE: " + highScore, 6, 48);
 }
+function changeLanguage(language) {
+	// Mettez à jour les textes en fonction de la langue sélectionnée
+	if (language === 'fr') {
+		IS_FR = true;
+		document.getElementById('gameTitle').innerHTML = "Mauvais Jeu d'Astéroïdes";
+		document.getElementById('madeFromScratch').innerHTML = "fait de zéro (582 lignes de JavaScript)";
+		document.getElementById('allCodeGfxAudio').innerHTML = "Tout le code, gfx et audio par moi, Terminé le 10 avril 2022";
+		document.getElementById('audioNote').innerHTML = "En fait, j'ai manqué de temps pour ajouter de l'audio, alors rayez cette dernière partie";
+		document.getElementById('instructions').innerHTML = "Gauche et Droite pour Tourner, Haut et Bas pour Bouger, Z pour Tirer";
+		document.getElementById('learnHow').innerHTML = "Apprenez comment cela fonctionne !";
+		document.getElementById('developedWith').innerHTML = "développé avec Vim sous Linux, testé sur Firefox (la bonne façon)";
+
+
+		document.getElementById('titleHowGameWork').innerHTML = "développé avec Vim sous Linux, testé sur Firefox (la bonne façon)";
+
+	} else if (language === 'en') {
+		IS_FR = false;
+		// Mettez les textes en anglais ici
+		document.getElementById('gameTitle').innerHTML = "Bad Asteroid Game";
+		document.getElementById('madeFromScratch').innerHTML = "made from scratch (582 lines of JavaScript)";
+		document.getElementById('allCodeGfxAudio').innerHTML = "All code, gfx, and audio by me, Finished Apr 10, 2022";
+		document.getElementById('audioNote').innerHTML = "actually I ran out of time to add audio so scratch that last part";
+		document.getElementById('instructions').innerHTML = "Left and Right to Turn, Up and Down to Move, Z to Shoot";
+		document.getElementById('learnHow').innerHTML = "Learn how this works!";
+		document.getElementById('developedWith').innerHTML = "developed with Vim under Linux, tested on Firefox (the right way)";
+	}
+}
+
