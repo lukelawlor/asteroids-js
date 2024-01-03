@@ -39,25 +39,62 @@ var kl = 0, kr = 0, ku = 0, kd = 0, k1 = 0, k2 = 0;
 
 // Listen for keyboard input
 document.addEventListener("keydown", function (e) {
-	switch (e.key) {
-		case 'ArrowLeft': { kl = 1; e.preventDefault(); break; }
-		case 'ArrowRight': { kr = 1; e.preventDefault(); break; }
-		case 'ArrowDown': { kd = 1; e.preventDefault(); break; }
-		case 'ArrowUp': { ku = 1; e.preventDefault(); break; }
-		case 'z': { k1 = 1; break; }
-		case 'Enter': { k2 = 1; break; }
-	}
+    switch (e.key) {
+        case 'ArrowLeft':
+        case 'q':
+            kl = 1;
+            e.preventDefault();
+            break;
+        case 'ArrowRight':
+        case 'd':
+            kr = 1;
+            e.preventDefault();
+            break;
+        case 'ArrowDown':
+        case 's':
+            kd = 1;
+            e.preventDefault();
+            break;
+        case 'ArrowUp':
+        case 'z':
+            ku = 1;
+            e.preventDefault();
+            break;
+        case ' ':
+            k1 = 1;
+            e.preventDefault();
+            break;
+        case 'Enter':
+            k2 = 1;
+            break;
+		case 'Escape':
+			gmEnd();
+    }
 });
 document.addEventListener("keyup", function (e) {
-	switch (e.key) {
-		case 'ArrowLeft': { kl = 0; break; }
-		case 'ArrowRight': { kr = 0; break; }
-		case 'ArrowDown': { kd = 0; break; }
-		case 'ArrowUp': { ku = 0; break; }
-		case 'z': { k1 = 0; break; }
-	}
+    switch (e.key) {
+        case 'ArrowLeft':
+        case 'q':
+            kl = 0;
+            break;
+        case 'ArrowRight':
+        case 'd':
+            kr = 0;
+            break;
+        case 'ArrowDown':
+        case 's':
+            kd = 0;
+            break;
+        case 'ArrowUp':
+        case 'z':
+            ku = 0;
+            break;
+        case ' ':
+            k1 = 0;
+			e.preventDefault();
+            break;
+    }
 });
-
 
 // Set keys that don't repeat when held 
 function stopKeyRepeat() {
