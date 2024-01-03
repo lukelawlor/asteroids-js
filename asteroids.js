@@ -13,7 +13,6 @@ import { GAME_TXT } from '/translations/home.js'
 import { drawBg } from './src/services/background.service'
 import { setupCanva } from './src/services/canva.service'
 import { oCollideWithLarger, oCollideWithSmaller } from './src/services/collider.service'
-import { initFramerateParams, updateFramerate } from './src/services/framerate.service'
 import { initGameVariables } from './src/services/game.service'
 import { initImages } from './src/services/image.service'
 import { initInstancesParams, killInst } from './src/services/instances.service'
@@ -117,9 +116,15 @@ function toggleAudio() {
 }
 
 // Framerate
-let { frameLast, frameNow, fps } = initFramerateParams()
+var frameLast = Date.now()
+var frameNow = frameLast
+var fps = 0
 
-updateFramerate(frameNow, fps, frameLast)
+function updateFramerate() {
+	frameNow = Date.now()
+	fps = Math.round(1000 / (frameNow - frameLast))
+	frameLast = frameNow
+}
 
 // Game Objects
 function makeInst(x, y, o) {
