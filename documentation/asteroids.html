@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentation Asteroids | Coding Club Project</title>
+    <link rel="stylesheet" href="../assets/css/doc-v2.css" />
+  </head>
+  <body>
+    <aside>
+      <div class="content-aside">
+        <h4><a href="doc.html">The Documentation :</a></h4>
+        <a href="canva.html">01. The Canvas</a><br />
+        <a href="drawing.html">02. Drawing</a><br />
+        <a href="input.html">03. Keyboard Input</a><br />
+        <a href="objects.html">04. Game Loop & Objects</a><br />
+        <a href="physics.html">05. Spaceship Physics</a><br />
+        <a href="wrapping.html">06. Screen Wrapping</a><br />
+        <a href="shooting.html">07. Shooting</a><br />
+        <a href="asteroids.html" class="active">08. Asteroids</a><br />
+        <a href="collision.html">09. Collision</a><br />
+        <a href="screens.html">10. Title/Game/End Screens</a><br />
+      </div>
+    </aside>
+    <div class="container">
+      <div class="content">
+        <div class="inner">
+          <h2 id="asteroids" class="mb">Asteroids</h2>
+          <p>
+            Asteroids are spawned by alert objects, which are spawned by an if
+            statement found in <b>gmLoop</b> shown below. The spawning is
+            influenced by three global variables: <b>spawning</b>,
+            <b>spawnTime</b>, and <b>spawnTimeReset</b>.
+          </p>
+          <p>
+            <b>spawning</b> is a boolean that controls whether or not asteroids
+            can spawn.
+          </p>
+          <p>
+            <b>spawnTime</b> is an integer that decrements each frame until it
+            reaches <b>0</b>, at which point an alert object will spawn.
+          </p>
+          <p>
+            <b>spawnTimeReset</b> is the value that <b>spawnTime</b> is reset to
+            upon reaching <b>0</b>, and it decreases by
+            <b>SPAWN_TIME_DEC</b> each time an alert object is created. This
+            shortens the amount of time between alert spawns until
+            <b>spawnTimeReset</b> reaches the minimum spawn time,
+            <b>SPAWN_TIME_MIN</b>.
+          </p>
+          <div class="code">
+            // Spawn Asteroids<br />
+            if (spawning &amp;&amp; (--spawnTime) &lt;= 0)<br />
+            {<br />
+            &emsp;// Spawn Asteroid<br />
+            &emsp;var x = Math.random() * GAME_WIDTH;<br />
+            &emsp;var y = Math.random() * GAME_HEIGHT;<br />
+            &emsp;new makeInst(x, y, 3);<br />
+            <br />
+            &emsp;// Reset Spawn Time<br />
+            &emsp;spawnTimeReset -= SPAWN_TIME_DEC;<br />
+            &emsp;if (spawnTimeReset &lt; SPAWN_TIME_MIN)<br />
+            &emsp;&emsp;spawnTimeReset = SPAWN_TIME_MIN;<br />
+            &emsp;spawnTime = spawnTimeReset;<br />
+            }<br />
+          </div>
+          <p>
+            Alert objects draw a blinking exclamation mark symbol onto the
+            screen before spawning an asteroid. This is done to give the player
+            time to react before each asteroid spawns. Their update function,
+            shown below, is very simple:
+          </p>
+          <div class="code">
+            function oAlertUD()<br />
+            {<br />
+            &emsp;// Duration<br />
+            &emsp;if ((--this.dur) == 0)<br />
+            &emsp;{<br />
+            &emsp;&emsp;// Spawn an asteroid, then delete self<br />
+            &emsp;&emsp;new makeInst(this.x, this.y, 2);<br />
+            &emsp;&emsp;killInst(this);<br />
+            &emsp;}<br />
+            <br />
+            &emsp;// Animation<br />
+            &emsp;if ((--this.frames) == 0)<br />
+            &emsp;{<br />
+            &emsp;&emsp;this.frames = ALERT_FRAMES;<br />
+            &emsp;&emsp;this.frame1 = !this.frame1;<br />
+            &emsp;}<br />
+            <br />
+            &emsp;// Drawing<br />
+            &emsp;c.drawImage(this.frame1 ? sAlert1 : sAlert2, this.x,
+            this.y);<br />
+            }<br />
+          </div>
+          <p>
+            Asteroids are also very simple. They wrap around the screen with the
+            same functions as spaceships, and move similarly to bullets with
+            <b>hsp</b> and <b>vsp</b> values, however, these variables are
+            initialized in <b>makeInst</b> rather than being set by another
+            instance, i.e., spaceship instances setting bullet speeds. Here is
+            their update function:
+          </p>
+          <div class="code">
+            function oAsteroidUD()<br />
+            {<br />
+            &emsp;// Move<br />
+            &emsp;this.x += this.hsp;<br />
+            &emsp;this.y += this.vsp;<br />
+            <br />
+            &emsp;// Wrap around world<br />
+            &emsp;this.worldWrap();<br />
+            <br />
+            &emsp;// Check for collision with a bullet<br />
+            &emsp;var hitby;<br />
+            &emsp;if ((hitby = this.hit(1, this.x - this.halfWidth, this.y -
+            this.halfHeight, 64, 64, 0, 0, 10, 10)) != null)<br />
+            &emsp;{<br />
+            &emsp;&emsp;if ((--this.hp) == 0)<br />
+            &emsp;&emsp;{<br />
+            &emsp;&emsp;&emsp;++score;<br />
+            &emsp;&emsp;&emsp;killInst(this);<br />
+            &emsp;&emsp;}<br />
+            &emsp;&emsp;killInst(hitby);<br />
+            &emsp;}<br />
+            <br />
+            &emsp;// Draw<br />
+            &emsp;this.drawWrap();<br />
+            }<br />
+          </div>
+          <p>
+            The only complex piece of code is the collision checking for
+            bullets, which will be explained in the next section.
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

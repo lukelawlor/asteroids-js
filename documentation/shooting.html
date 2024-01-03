@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentation Shooting | Coding Club Project</title>
+    <link rel="stylesheet" href="../assets/css/doc.css" />
+  </head>
+  <body>
+    <aside>
+      <div class="content-aside">
+        <h4><a href="doc.html">The Documentation :</a></h4>
+        <a href="canva.html">01. The Canvas</a><br />
+        <a href="drawing.html">02. Drawing</a><br />
+        <a href="input.html">03. Keyboard Input</a><br />
+        <a href="objects.html">04. Game Loop & Objects</a><br />
+        <a href="physics.html">05. Spaceship Physics</a><br />
+        <a href="wrapping.html">06. Screen Wrapping</a><br />
+        <a href="shooting.html" class="active">07. Shooting</a><br />
+        <a href="asteroids.html">08. Asteroids</a><br />
+        <a href="collision.html">09. Collision</a><br />
+        <a href="screens.html">10. Title/Game/End Screens</a><br />
+      </div>
+    </aside>
+    <div class="container">
+      <div class="content">
+        <div class="inner">
+          <h2 id="shooting">Shooting</h2>
+          <p>
+            This section covers the mechanics of bullet firing by the spaceship
+            object that the player controls. Bullets, like the spaceship itself,
+            are objects created with <b>makeInst</b> that have speeds
+            initialized upon their creation which go unchanged until the object
+            is destroyed. The following function is used by spaceship instances
+            to create them.
+          </p>
+          <div class="code">
+            function oSpaceshipShoot()<br />
+            {<br />
+            &emsp;var bullet = new makeInst(this.x, this.y, 1);<br />
+            &emsp;bullet.hsp = Math.cos(this.dir) * this.bulletSpeed;<br />
+            &emsp;bullet.vsp = Math.sin(this.dir) * this.bulletSpeed;<br />
+            }<br />
+          </div>
+          <p>
+            Bullets use two variables to move each frame, <b>hsp</b> and
+            <b>vsp</b> which control the bullets' horizontal speed and vertical
+            speed respectively. These are used instead of a direction and speed
+            variable to control bullet movement because they only need to be
+            calculated once, while direction calculations must be performed
+            every frame to move a bullet. This improves performance, especially
+            when many bullets objects are in action at once.
+          </p>
+          <p>
+            The rate at which bullets are fired are dependent on two variables
+            in the spaceship object, <b>shootCooldown</b> and
+            <b>shootCooldownReset</b>. <b>shootCooldown</b> is decremented each
+            frame in the spaceship's <b>ud</b> function until it reaches
+            <b>0</b>. When the Z key is pressed or held at this point, a bullet
+            will be fired, and <b>shootCooldown</b> will be set to
+            <b>shootCooldownReset</b>. The player must wait until
+            <b>shootCooldown</b> reaches <b>0</b> to fire another bullet, or let
+            go of the Z key to immediately set the cooldown to <b>0</b>. Below
+            is the code that the spaceship runs to perform all of this:
+          </p>
+          <div class="code">
+            // Shooting<br />
+            if (this.shootCooldown == 0)<br />
+            {<br />
+            &emsp;if (k1)<br />
+            &emsp;{<br />
+            &emsp;&emsp;this.shoot();<br />
+            &emsp;&emsp;this.shootCooldown = this.shootCooldownReset;<br />
+            &emsp;}<br />
+            }<br />
+            else<br />
+            {<br />
+            &emsp;--this.shootCooldown;<br />
+            &emsp;if (!k1)<br />
+            &emsp;&emsp;this.shootCooldown = 0;<br />
+            }<br />
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

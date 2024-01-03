@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentation The Canvas | Coding Club Project</title>
+    <link rel="stylesheet" href="../assets/css/doc.css" />
+  </head>
+  <body>
+    <aside>
+      <div class="content-aside">
+        <h4><a href="doc.html">The Documentation :</a></h4>
+        <a href="canva.html" class="active">01. The Canvas</a><br />
+        <a href="drawing.html">02. Drawing</a><br />
+        <a href="input.html">03. Keyboard Input</a><br />
+        <a href="objects.html">04. Game Loop & Objects</a><br />
+        <a href="physics.html">05. Spaceship Physics</a><br />
+        <a href="wrapping.html">06. Screen Wrapping</a><br />
+        <a href="shooting.html">07. Shooting</a><br />
+        <a href="asteroids.html">08. Asteroids</a><br />
+        <a href="collision.html">09. Collision</a><br />
+        <a href="screens.html">10. Title/Game/End Screens</a><br />
+      </div>
+    </aside>
+    <div class="container">
+      <div class="content">
+        <div class="inner">
+          <h2>The Canvas</h2>
+          <p>
+            Everything rendered in the game is done using the HTML5 Canvas.
+            Canvases can be drawn to and cleared with JavaScript. You can create
+            a canvas using the
+            <b>canvas</b> HTML tag as shown below:
+          </p>
+          <div class="code">
+            &lt;canvas id="can" width="0" height="0"&gt;<br />
+            &emsp;Your browser does not support the HTML5 canvas<br />
+            &lt;/canvas&gt;<br />
+          </div>
+          <p>
+            The text inside the tag is shown if the client's browser is outdated
+            and does not support the canvas. The <b>width</b> and
+            <b>height</b> attributes specify the dimensions of the canvas in
+            pixels. Notice that there is a distinction between these values and
+            the CSS width and height of the canvas. In this example, the
+            dimensions are set to 0x0 because they will be changed later with
+            JS.
+          </p>
+          <p>
+            To interact with the canvas in JS, we must reference it with
+            <b>document.getElementById()</b>. To draw to it, we must get the 2D
+            context of the canvas.
+          </p>
+          <div class="code">
+            var cv = document.getElementById("can");<br />
+            cv.width = GAME_WIDTH;<br />
+            cv.height = GAME_HEIGHT;<br />
+            var c = cv.getContext("2d", {alpha: false});<br />
+          </div>
+          <p>
+            The context of the canvas is obtained with
+            <b>cv.getContext("2d", {alpha: false})</b>. Passing
+            <b>{alpha: false}</b> removes the transparent background of the
+            canvas to improve performance. It is optional. I named the context
+            variable <b>c</b> so it can be typed easily, because we will be
+            using it to draw to the canvas often.
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

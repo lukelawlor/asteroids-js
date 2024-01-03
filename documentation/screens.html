@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentation Title/Game/End Screens | Coding Club Project</title>
+    <link rel="stylesheet" href="../assets/css/doc.css" />
+  </head>
+  <body>
+    <aside>
+      <div class="content-aside">
+        <h4><a href="doc.html">The Documentation :</a></h4>
+        <a href="canva.html">01. The Canvas</a><br />
+        <a href="drawing.html">02. Drawing</a><br />
+        <a href="input.html">03. Keyboard Input</a><br />
+        <a href="objects.html">04. Game Loop & Objects</a><br />
+        <a href="physics.html">05. Spaceship Physics</a><br />
+        <a href="wrapping.html">06. Screen Wrapping</a><br />
+        <a href="shooting.html">07. Shooting</a><br />
+        <a href="asteroids.html">08. Asteroids</a><br />
+        <a href="collision.html">09. Collision</a><br />
+        <a href="screens.html" class="active">10. Title/Game/End Screens</a
+        ><br />
+      </div>
+    </aside>
+    <div class="container">
+      <div class="content">
+        <div class="inner">
+          <h2 id="screens">Title/Game/End Screens</h2>
+          <p>
+            This section covers the code behind the multiple "screens" of the
+            game, those being the title screen, gameplay screen, and game over
+            screen.
+          </p>
+          <p>
+            The title screen is run by calling the function <b>gmTitle</b>. This
+            simply creates a title screen object and starts the game loop.
+          </p>
+          <div class="code">
+            function gmTitle()<br />
+            {<br />
+            &emsp;new makeInst(0, 0, 4);<br />
+            &emsp;gmLoop();<br />
+            }<br />
+          </div>
+          <p>
+            The update function of the title object draws the title text and
+            starts the game when enter is pressed by calling <b>gmStart</b>.
+          </p>
+          <div class="code">
+            function oTitleUD()<br />
+            {<br />
+            &emsp;c.textAlign = "center";<br />
+            &emsp;c.font = "20px Courier";<br />
+            &emsp;c.fillStyle = TEXT_COLOR_GREEN;<br />
+            &emsp;c.fillText("the game finished loading. yay.", GAME_WIDTH_HALF,
+            GAME_HEIGHT_HALF - 120);<br />
+            &emsp;c.fillStyle = TEXT_COLOR_WHITE;<br />
+            &emsp;c.fillText("Bad Asteroid Game", GAME_WIDTH_HALF,
+            GAME_HEIGHT_HALF - 60);<br />
+            &emsp;c.fillStyle = TEXT_COLOR_GREEN;<br />
+            &emsp;c.fillText("by Luke Lawlor", GAME_WIDTH_HALF, GAME_HEIGHT_HALF
+            - 30);<br />
+            &emsp;c.fillText("Press Enter to Play", GAME_WIDTH_HALF,
+            GAME_HEIGHT_HALF + 20);<br />
+            <br />
+            &emsp;if (k2)<br />
+            &emsp;&emsp;gmStart();<br />
+            }<br />
+          </div>
+          <p>
+            The function <b>gmStart</b> destroys all object instances by filling
+            <b>inst</b> with null values, starts the spawning of asteroids, sets
+            the score to <b>0</b>, and creates a spaceship object.
+          </p>
+          <div class="code">
+            function gmStart()<br />
+            {<br />
+            &emsp;inst.fill(null);<br />
+            &emsp;spawning = true;<br />
+            &emsp;spawnTimeReset = SPAWN_TIME_START;<br />
+            &emsp;spawnTime = 10;<br />
+            &emsp;score = 0;<br />
+            &emsp;new makeInst(100, 80, 0);<br />
+            }<br />
+          </div>
+          <p>
+            The final screen changing function is <b>gmEnd</b>. This destroys
+            all object instances, records the high score, stops the spawning of
+            asteroids, and creates a game over screen object.
+          </p>
+          <div class="code">
+            function gmEnd()<br />
+            {<br />
+            &emsp;if (score &gt; highScore)<br />
+            &emsp;&emsp;highScore = score;<br />
+            &emsp;inst.fill(null);<br />
+            &emsp;spawning = false;<br />
+            &emsp;new makeInst(0, 0, 5);<br />
+            }<br />
+          </div>
+          <p>
+            The game over screen object draws the game over text and restarts
+            the game by calling <b>gmStart</b>, just as the title screen object
+            does.
+          </p>
+          <div class="code">
+            function oEndUD()<br />
+            {<br />
+            &emsp;c.textAlign = "center";<br />
+            &emsp;c.font = "20px Courier";<br />
+            &emsp;c.fillStyle = TEXT_COLOR_WHITE;<br />
+            &emsp;c.fillText("G A M E O V E R", GAME_WIDTH_HALF,
+            GAME_HEIGHT_HALF - 60);<br />
+            &emsp;c.fillStyle = TEXT_COLOR_GREEN;<br />
+            &emsp;c.fillText("Score: " + score, GAME_WIDTH_HALF,
+            GAME_HEIGHT_HALF - 30);<br />
+            &emsp;c.fillText("High Score: " + highScore, GAME_WIDTH_HALF,
+            GAME_HEIGHT_HALF - 12);<br />
+            &emsp;c.fillText("Press Enter to Replay", GAME_WIDTH_HALF,
+            GAME_HEIGHT_HALF + 20);<br />
+            <br />
+            &emsp;if (k2)<br />
+            &emsp;&emsp;gmStart();<br />
+            }<br />
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
