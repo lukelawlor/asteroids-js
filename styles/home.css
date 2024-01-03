@@ -1,7 +1,7 @@
 body {
 	background-color: #001145;
 	color: #ffffff;
-	background-image: url("../public/images/pagebg.png");
+	background-image: url('/images/pagebg.png');
 	font-family: 'Arial', sans-serif;
 	margin: 0;
 }

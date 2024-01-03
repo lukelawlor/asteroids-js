@@ -1,7 +1,7 @@
 body {
 	background-color: #001145;
 	color: #ffffff;
-	background-image: url("../public/images/pagebg.png");
+	background-image: url('/images/pagebg.png');
 	padding: 0;
 	margin: 0;
 	font-size: 16px;
