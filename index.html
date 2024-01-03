@@ -1,73 +1,63 @@
-<!doctype html>
-<html lang="en">
-
-  <head>
-    <meta charset="UTF-8" />
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0" />
-    <title>Coding Club Project</title>
-    <style>
-      body {
-        background-color: #001145;
-        color: #ffffff;
-        background-image: url(/images/pagebg.png);
-      }
+	<title>Coding Club Project</title>
+	<style>
+		body{
+			background-color: #001145;
+			color: #ffffff;
+			background-image: url(assets/images/pagebg.png);
+		}
+		#content{
+			text-align: center;
+		}
+		#can{
+			border: 1px solid #0000ff;
+		}
+		.vr{ height: 12px; }
+		.vr-big{ height: 80px; }
+		a{ color: #88ff88; }
+		a:hover{ color: #ffffff; }
+		a:active{ color: #88ff88; }
+	</style>
+</head>
+<body>
+<div id="content" style="">
+	<div style="display: flex; flex-direction: row">
+		<div style="max-width: 350px;margin-left: auto;">
+			<h1 id="gameTitle">Bad Asteroid Game</h1>
+			<h4 id="madeFromScratch">made from scratch (582 lines of JavaScript)</h4>
+			<h4 id="allCodeGfxAudio">All code, gfx, and audio by me, Finished Apr 10, 2022</h4>
+			<h4 id="audioNote">actually I ran out of time to add audio so scratch that last part</h4>
+			<div class="vr"></div>
+            <h4>Left ('Q' or &#8592;) and Right ('D' or &#8594;) to Turn</h4>
+            <h4>Up ('Z' or &#8593;) to Move</h4>
+            <h4>Down ('S' or &#8595;) to Brake</h4>
+            <h4>Space to Shoot</h4>
+            <h4>Press Enter to Start</h4>
+            <h4>Press Escape to stop</h4>
+            <h4>Press 'M' to toggle sound effects</h4>
+			<button onclick="changeLanguage('fr')"><img src="assets/images/icons8-france-48.png" alt="fr"></button> <!-- Ajout du bouton avec le drapeau français -->
+			<button onclick="changeLanguage('en')"><img src="assets/images/icons8-united-kingdom-48.png" alt="fr"></button> <!-- Ajout du bouton avec le drapeau français -->
+			<div class="vr-big"></div>
+			<h2><a href="doc.html" id="learnHow">Learn how this works!</a></h2>
 
-      #content {
-        text-align: center;
-      }
-
-      #can {
-        border: 1px solid #0000ff;
-      }
-
-      .vr {
-        height: 12px;
-      }
-
-      .vr-big {
-        height: 80px;
-      }
-
-      a {
-        color: #88ff88;
-      }
-
-      a:hover {
-        color: #ffffff;
-      }
-
-      a:active {
-        color: #88ff88;
-      }
-    </style>
-  </head>
-
-  <body>
-    <div id="content">
-      <h1>Bad Asteroid Game</h1>
-      <canvas id="can"
-              width="0"
-              height="0">
-        Your browser does not support the HTML5 canvas.
-      </canvas>
-      <div class="vr"></div>
-      <h4>Left ('Q' or &#8592;) and Right ('D' or &#8594;) to Turn</h4>
-      <h4>Up ('Z' or &#8593;) to Move</h4>
-      <h4>Down ('S' or &#8595;) to Brake</h4>
-      <h4>Space to Shoot</h4>
-      <h4>Press Enter to Start</h4>
-      <h4>Press Escape to stop</h4>
-      <h4>Press 'M' to toggle sound effects</h4>
-      <div class="vr"></div>
-      <h2><a href="doc.html">Learn how this works!</a></h2>
-      <div class="vr-big"></div>
-      <img src="/gif/vim.gif"><img src="/gif/linux.gif"><img src="/gif/firefox.gif">
-      <br>
-      <small>developed with Vim under Linux, tested on Firefox (the right way)</small>
-    </div>
-    <script type="module"
-            src="./asteroids.js"></script>
-  </body>
-
+		</div>
+		<canvas id="can" width="0" height="0" style="margin: 0 auto">
+			Your browser does not support the HTML5 canvas.
+		</canvas>
+	</div>
+	<div class="vr"></div>
+	<div>
+		<img src="assets/gif/vim.gif"><img src="assets/gif/linux.gif"><img src="assets/gif/firefox.gif">
+		<br>
+		<small id="developedWith" >developed with Vim under Linux, tested on Firefox (the right way)</small>
+	</div>
+</div>
+<script type="module"
+        src="./asteroids.js"></script>
+</body>
 </html>
