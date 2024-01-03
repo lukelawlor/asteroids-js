@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentation Collision | Coding Club Project</title>
+    <link rel="stylesheet" href="../assets/css/doc.css" />
+  </head>
+  <body>
+    <aside>
+      <div class="content-aside">
+        <h4><a href="doc.html">The Documentation :</a></h4>
+        <a href="canva.html">01. The Canvas</a><br />
+        <a href="drawing.html">02. Drawing</a><br />
+        <a href="input.html">03. Keyboard Input</a><br />
+        <a href="objects.html">04. Game Loop & Objects</a><br />
+        <a href="physics.html">05. Spaceship Physics</a><br />
+        <a href="wrapping.html">06. Screen Wrapping</a><br />
+        <a href="shooting.html">07. Shooting</a><br />
+        <a href="asteroids.html">08. Asteroids</a><br />
+        <a href="collision.html" class="active">09. Collision</a><br />
+        <a href="screens.html">10. Title/Game/End Screens</a><br />
+      </div>
+    </aside>
+    <div class="container">
+      <div class="content">
+        <div class="inner">
+          <h2 id="collision">Collision</h2>
+          <p>
+            Collision between object instances is done with the function
+            <b>checkRect</b>, which checks for a collision between two
+            rectangles. It takes 8 parameters: the x, y, width, and height of
+            two different rectangles, and returns a boolean. The only
+            precondition is that the variables for the smaller rectangle is
+            passed first.
+          </p>
+          <div class="code">
+            function checkRect(x1,y1,w1,h1,x2,y2,w2,h2)<br />
+            {<br />
+            &emsp;var x12 = x1 + w1;<br />
+            &emsp;var y12 = y1 + h1;<br />
+            &emsp;var x22 = x2 + w2;<br />
+            &emsp;var y22 = y2 + h2;<br />
+            <br />
+            &emsp;if (x1 &gt;= x2 &amp;&amp; x1 &lt;= x22)<br />
+            &emsp;{<br />
+            &emsp;&emsp;//Left Side Hit<br />
+            &emsp;&emsp;if (y1 &gt;= y2 &amp;&amp; y1 &lt;= y22)<br />
+            &emsp;&emsp;{<br />
+            &emsp;&emsp;&emsp;//Top Side Hit<br />
+            &emsp;&emsp;&emsp;return true;<br />
+            &emsp;&emsp;}<br />
+            &emsp;&emsp;if (y12 &gt;= y2 &amp;&amp; y12 &lt;= y22)<br />
+            &emsp;&emsp;{<br />
+            &emsp;&emsp;&emsp;// Bottom Side Hit<br />
+            &emsp;&emsp;&emsp;return true;<br />
+            &emsp;&emsp;}<br />
+            &emsp;}<br />
+            &emsp;else if (x12 &gt;= x2 &amp;&amp; x12 &lt;= x22)<br />
+            &emsp;{<br />
+            &emsp;&emsp;// Right Side Hit<br />
+            &emsp;&emsp;if (y1 &gt;= y2 &amp;&amp; y1 &lt;= y22)<br />
+            &emsp;&emsp;{<br />
+            &emsp;&emsp;&emsp;//Top Side Hit<br />
+            &emsp;&emsp;&emsp;return true;<br />
+            &emsp;&emsp;}<br />
+            &emsp;&emsp;if (y12 &gt;= y2 &amp;&amp; y12 &lt;= y22)<br />
+            &emsp;&emsp;{<br />
+            &emsp;&emsp;&emsp;// Bottom Side Hit<br />
+            &emsp;&emsp;&emsp;return true;<br />
+            &emsp;&emsp;}<br />
+            &emsp;}<br />
+            &emsp;return false;<br />
+            }<br />
+          </div>
+          <p>
+            This function is used by another two functions:
+            <b>oCollideWithSmaller</b> and <b>oCollideWithLarger</b>. These
+            functions are called by object instances to check for collisions
+            between all instances of another type of object. This is done by
+            looping through <b>inst</b> to find all instances of the object type
+            and calling <b>checkRect</b> with their variables. If a collision is
+            found, the instance collided with is returned, otherwise
+            <b>null</b> is returned. Here is <b>oCollideWithSmaller</b>:
+          </p>
+          <div class="code">
+            function oCollideWithSmaller(o, x1, y1, w1, h1, s1, s2, w2, h2)<br />
+            {&emsp;<br />
+            &emsp;var other; <br />
+            &emsp;for (var i = 0; i &lt; MAX_INSTANCES; ++i)<br />
+            &emsp;{<br />
+            &emsp;&emsp;other = inst[i];<br />
+            &emsp;&emsp;if (other != null &amp;&amp; other.o == o)<br />
+            &emsp;&emsp;{<br />
+            &emsp;&emsp;&emsp;if (checkRect(other.x + s1, other.y + s2, w2, h2,
+            x1, y1, w1, h1))<br />
+            &emsp;&emsp;&emsp;&emsp;return other;<br />
+            &emsp;&emsp;}<br />
+            &emsp;}<br />
+            &emsp;return null;<br />
+            }<br />
+          </div>
+          <p>
+            The function <b>oCollideWithLarger</b> is identical to
+            <b>oCollideWithSmaller</b> except the order of rectangles passed to
+            <b>checkRect</b> is reversed. This is because the functionality of
+            <b>checkRect</b> depends on the smaller rectangle being passed
+            first. The two "collide with" functions exist to check for
+            collisions with objects that are smaller than the calling instance
+            or larger.
+          </p>
+          <p>
+            The reason two "collide with" functions exist despite much of their
+            code being the same is to improve performance. If there was only one
+            "collide with" function that required an extra if statement to
+            determine which set of objects was smaller, performance would
+            suffer, because that if statement would be run for every single
+            instance of the object type being searched for.
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

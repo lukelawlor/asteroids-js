@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentation Keyboard Input | Coding Club Project</title>
+    <link rel="stylesheet" href="../assets/css/doc.css" />
+  </head>
+  <body>
+    <aside>
+      <div class="content-aside">
+        <h4><a href="doc.html">The Documentation :</a></h4>
+        <a href="canva.html">01. The Canvas</a><br />
+        <a href="drawing.html">02. Drawing</a><br />
+        <a href="input.html" class="active">03. Keyboard Input</a><br />
+        <a href="objects.html">04. Game Loop & Objects</a><br />
+        <a href="physics.html">05. Spaceship Physics</a><br />
+        <a href="wrapping.html">06. Screen Wrapping</a><br />
+        <a href="shooting.html">07. Shooting</a><br />
+        <a href="asteroids.html">08. Asteroids</a><br />
+        <a href="collision.html">09. Collision</a><br />
+        <a href="screens.html">10. Title/Game/End Screens</a><br />
+      </div>
+    </aside>
+    <div class="container">
+      <div class="content">
+        <div class="inner">
+          <h2 id="input">Keyboard Input</h2>
+          <p>
+            To detect keyboard input, two event listeners are added to the
+            document that check for key presses and releases. These are added
+            with the
+            <b>document</b> function <b>addEventListener</b> which takes two
+            parameters. These include a string specifying the type of event to
+            listen for, in this case <b>"keydown"</b> or <b>"keyup"</b>, and a
+            function to call when the event is activated, which an event object
+            is automatically passed to.
+          </p>
+          <p>
+            The <b>keyCode</b> variable of the event object contains an integer
+            that represents the ID of the key being pressed or released. A
+            switch statement is used to check which key code corresponds to
+            which key variable. They key variables are set to 1 when activated
+            in the <b>keydown</b> event and 0 in the <b>keyup</b> event.
+          </p>
+          <p>
+            To find the key code of a desired key, you can find a table online
+            containing all key codes, or if you prefer to not visit any other
+            sites, write a function yourself that prints the key code of the
+            last pressed key.
+          </p>
+          <div class="code">
+            // Keyboard Input<br />
+            var kl = 0, kr = 0, ku = 0, kd = 0, k1 = 0, k2 = 0;<br />
+            <br />
+            // Listen for keyboard input<br />
+            document.addEventListener("keydown", function(e)<br />
+            {<br />
+            &emsp;switch (e.keyCode)<br />
+            &emsp;{<br />
+            &emsp;&emsp;case 37:{kl=1;e.preventDefault();break;}<br />
+            &emsp;&emsp;case 39:{kr=1;e.preventDefault();break;}<br />
+            &emsp;&emsp;case 40:{kd=1;e.preventDefault();break;}<br />
+            &emsp;&emsp;case 38:{ku=1;e.preventDefault();break;}<br />
+            <br />
+            &emsp;&emsp;case 90:{k1=1;break;}<br />
+            &emsp;&emsp;case 13:{k2=1;break;}<br />
+            &emsp;}<br />
+            });<br />
+            document.addEventListener("keyup", function(e)<br />
+            {<br />
+            &emsp;switch (e.keyCode)<br />
+            &emsp;{<br />
+            &emsp;&emsp;case 37:{kl=0;break;}<br />
+            &emsp;&emsp;case 39:{kr=0;break;}<br />
+            &emsp;&emsp;case 40:{kd=0;break;}<br />
+            &emsp;&emsp;case 38:{ku=0;break;}<br />
+            <br />
+            &emsp;&emsp;case 90:{k1=0;break;}<br />
+            &emsp;}<br />
+            });<br />
+          </div>
+          <p>
+            Key codes <b>37</b> through <b>40</b> represent the arrow keys. When
+            they are activated in the <b>keydown</b> event, the function
+            <b>preventDefault</b> of the event object is called to prevent the
+            default action of these keys, which scroll around the page. Without
+            calling this function, the player would unintentionally scroll
+            around the webpage when trying to play, which makes games nearly
+            unplayable.
+          </p>
+          <p>
+            With these two <b>keydown</b> and <b>keyup</b> events we can now
+            detect when keys are held down, but not when they are initially
+            pressed. To implement key press detection, the function
+            <b>stopKeyRepeat</b> is used, which simply sets the keys we only
+            want to detect initial presses on to <b>0</b>.
+          </p>
+          <div class="code">
+            function stopKeyRepeat()<br />
+            {<br />
+            &emsp;k2 = 0;<br />
+            }<br />
+          </div>
+          <p>
+            This function is called every game loop after objects are done
+            updating. When the keys it affects are pressed and set to <b>1</b>,
+            the game objects will run their update function once before the key
+            is set back to <b>0</b>, only activated upon another initial press
+            of the key. The game loop is a function that evaluates every game
+            frame, and it will be explained in the next section.
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

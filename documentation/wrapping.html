@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentation Screen Wrapping | Coding Club Project</title>
+    <link rel="stylesheet" href="../assets/css/doc.css" />
+  </head>
+  <body>
+    <aside>
+      <div class="content-aside">
+        <h4><a href="doc.html">The Documentation :</a></h4>
+        <a href="canva.html">01. The Canvas</a><br />
+        <a href="drawing.html">02. Drawing</a><br />
+        <a href="input.html">03. Keyboard Input</a><br />
+        <a href="objects.html">04. Game Loop & Objects</a><br />
+        <a href="physics.html">05. Spaceship Physics</a><br />
+        <a href="wrapping.html" class="active">06. Screen Wrapping</a><br />
+        <a href="shooting.html">07. Shooting</a><br />
+        <a href="asteroids.html">08. Asteroids</a><br />
+        <a href="collision.html">09. Collision</a><br />
+        <a href="screens.html">10. Title/Game/End Screens</a><br />
+      </div>
+    </aside>
+    <div class="container">
+      <div class="content">
+        <div class="inner">
+          <h2 id="wrapping">Screen Wrapping</h2>
+          <p>
+            To keep the player and asteroids within the bounds of the screen,
+            the x and y values of the objects are reset once they reach the edge
+            of the screen.
+          </p>
+          <div class="code">
+            function oWorldWrap()<br />
+            {<br />
+            &emsp;if (this.x &gt; GAME_WIDTH)<br />
+            &emsp;&emsp;this.x = GAME_WIDTH - this.x;<br />
+            &emsp;else if (this.x &lt; 0)<br />
+            &emsp;&emsp;this.x = GAME_WIDTH + this.x;<br />
+            &emsp;<br />
+            &emsp;if (this.y &gt; GAME_HEIGHT)<br />
+            &emsp;&emsp;this.y = GAME_HEIGHT - this.y; <br />
+            &emsp;else if (this.y &lt; 0)<br />
+            &emsp;&emsp;this.y = GAME_HEIGHT + this.y;<br />
+            }<br />
+          </div>
+          <p>
+            When the x and y values are reset, they are positioned relative to
+            how far the object has move past the bounds of the screen. For
+            example, if the screen with is 600 pixels and the object's x
+            position is at 650, the x value will be reset to 0 plus 50 because
+            it traveled 50 pixels beyond the screen. This results in no loss of
+            movement when wrapping around the screen.
+          </p>
+          <p>
+            The code above properly handles the coordinates of objects, but we
+            still need to draw objects while they are wrapping from one side of
+            the screen to the next to make wrapping entirely seamless. This is
+            accomplished by drawing the objects in all 8 directions around them
+            with the following code:
+          </p>
+          <div class="code">
+            function oDrawWrap()<br />
+            {<br />
+            &emsp;var xstop = this.x + GAME_WIDTH;<br />
+            &emsp;var ystop = this.y + GAME_HEIGHT;<br />
+            <br />
+            &emsp;for (var x = this.x - GAME_WIDTH - 1; x &lt;= xstop; x +=
+            GAME_WIDTH)<br />
+            &emsp;{<br />
+            &emsp;&emsp;for (var y = this.y - GAME_HEIGHT - 1; y &lt;= ystop; y
+            += GAME_HEIGHT)<br />
+            &emsp;&emsp;{<br />
+            &emsp;&emsp;&emsp;this.draw(x, y);<br />
+            &emsp;&emsp;}<br />
+            &emsp;}<br />
+            }<br />
+          </div>
+          <p>
+            Each object is spaced horizontally by the screen width, and spaced
+            vertically by the screen height. This effect causes objects to
+            appear on top of the screen when wrapping from the bottom, on the
+            left of the screen when wrapping from the right, and so forth.
+          </p>
+          <p>
+            This draws a total of 9 images, so it should be used sparingly, as
+            drawing is a computationally expensive operation. It also has room
+            for optimization, as it can be edited to only draw objects based on
+            the direction they are moving in.
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

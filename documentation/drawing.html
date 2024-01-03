@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentation Drawing | Coding Club Project</title>
+    <link rel="stylesheet" href="../assets/css/doc.css" />
+  </head>
+  <body>
+    <aside>
+      <div class="content-aside">
+        <h4><a href="doc.html">The Documentation :</a></h4>
+        <a href="canva.html">01. The Canvas</a><br />
+        <a href="drawing.html" class="active">02. Drawing</a><br />
+        <a href="input.html">03. Keyboard Input</a><br />
+        <a href="objects.html">04. Game Loop & Objects</a><br />
+        <a href="physics.html">05. Spaceship Physics</a><br />
+        <a href="wrapping.html">06. Screen Wrapping</a><br />
+        <a href="shooting.html">07. Shooting</a><br />
+        <a href="asteroids.html">08. Asteroids</a><br />
+        <a href="collision.html">09. Collision</a><br />
+        <a href="screens.html">10. Title/Game/End Screens</a><br />
+      </div>
+    </aside>
+    <div class="container">
+      <div class="content">
+        <div class="inner">
+          <h2 id="drawing">Drawing</h2>
+          <p>
+            Drawing to the canvas is done using the 2D context we obtained
+            earlier. Image files can be drawn by passing an
+            <b>Image</b> variable along with the <b>x</b> and
+            <b>y</b> coordinates to draw to. Example:
+          </p>
+          <div class="code">
+            var sImage = new Image();<br />
+            sImage.src = "path/to/image.png";<br />
+            <br />
+            c.drawImage(sImage, 0, 0);<br />
+          </div>
+          <p>
+            This will draw an image to the top left corner of the canvas
+            (position 0,0). If you run this code unaltered, however, you likely
+            won't see anything appear, because you must wait for images to load
+            before drawing them. This can be done by setting the
+            <b>onload</b> value of the image to a function that checks if all
+            images you plan on using have loaded. This is how images are loaded
+            in the game:
+          </p>
+          <div class="code">
+            var imagesLoaded = 0;<br />
+            var imagesNeeded = 7;<br />
+            var imagesToLoad = [sSpaceship, sBullet, sAsteroid, sAlert1,
+            sAlert2, sBg1, sBg2];<br />
+            <br />
+            function imageLoaded()<br />
+            {<br />
+            &emsp;if ((++imagesLoaded) &gt;= imagesNeeded)<br />
+            &emsp;&emsp;gmTitle();<br />
+            }<br />
+            <br />
+            for (var i = 0; i &lt; imagesToLoad.length; ++i)<br />
+            {<br />
+            &emsp;imagesToLoad[i].onload = imageLoaded;<br />
+            }<br />
+          </div>
+          <p>
+            This code waits for all images to load, then calls
+            <b>gmTitle()</b> which starts the game. Feel free to optimize this
+            code if you plan on reusing it. I haven't optimized the code in this
+            case because it has little impact on performance. What does have
+            impact on performance, however, is drawing the images themselves.
+          </p>
+          <p>
+            To draw a rotated image (which is done with the spaceship), you must
+            translate and rotate the canvas context before calling
+            <b>drawImage</b>. In the game, this is done with this function:
+          </p>
+          <div class="code">
+            function oSpaceshipDraw(x, y)<br />
+            {<br />
+            &emsp;c.save();<br />
+            &emsp;c.translate(x, y);<br />
+            &emsp;c.rotate(this.dir);<br />
+            &emsp;c.drawImage(sSpaceship, -this.w / 2, -this.h / 2);<br />
+            &emsp;c.restore();<br />
+            }<br />
+          </div>
+          <p>
+            <b>c.save()</b> saves the current state of the canvas context. Then,
+            the context is translated by the x and y coordinates of the ship,
+            and rotated. The x and y coordinates used in <b>drawImage</b> are
+            relative to the x and y coordinates we translated the context by. In
+            this case, the negatives of the half of the width and height of the
+            ship are passed to position the ship in the center of the x and y
+            coordinates we are drawing to. Finally, <b>c.restore()</b> is
+            called, which undoes all of the translations and rotations, so that
+            next time we draw something, it isn't translated and rotated
+            somewhere random.
+          </p>
+          <p>
+            To avoid rotated image bluriness, as done in the game, the canvas
+            context variable <b>imageSmoothingEnabled</b> must be set to
+            <b>false</b>.
+          </p>
+          <div class="code">c.imageSmoothingEnabled = false;</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

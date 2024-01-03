@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentation Game Loop & Objects | Coding Club Project</title>
+    <link rel="stylesheet" href="../assets/css/doc.css" />
+  </head>
+  <body>
+    <aside>
+      <div class="content-aside">
+        <h4><a href="doc.html">The Documentation :</a></h4>
+        <a href="canva.html">01. The Canvas</a><br />
+        <a href="drawing.html">02. Drawing</a><br />
+        <a href="input.html">03. Keyboard Input</a><br />
+        <a href="objects.html" class="active">04. Game Loop & Objects</a><br />
+        <a href="physics.html">05. Spaceship Physics</a><br />
+        <a href="wrapping.html">06. Screen Wrapping</a><br />
+        <a href="shooting.html">07. Shooting</a><br />
+        <a href="asteroids.html">08. Asteroids</a><br />
+        <a href="collision.html">09. Collision</a><br />
+        <a href="screens.html">10. Title/Game/End Screens</a><br />
+      </div>
+    </aside>
+    <div class="container">
+      <div class="content">
+        <div class="inner">
+          <h2 id="objects">Game Loop & Objects</h2>
+          <p>
+            In the game, the game loop is contained in the function
+            <b>gmLoop</b>. This function executes a single frame of the game,
+            and then calls the function <b>requestAnimationFrame</b> to call
+            itself again in 1/60 of a second, resulting in game frames being
+            drawn at 60 frames per second.
+          </p>
+          <p>
+            To render a frame, the <b>gmLoop</b> function clears the canvas,
+            draws the background, executes the update function of all objects
+            that may draw themselves, and finally executes more code that isn't
+            tied to any object, including the spawning of asteroids and drawing
+            of the current score.
+          </p>
+          <div class="code">
+            function gmLoop()<br />
+            {<br />
+            &emsp;// Request another frame<br />
+            &emsp;requestAnimationFrame(gmLoop);<br />
+            <br />
+            &emsp;// Clear Screen<br />
+            &emsp;c.clearRect(0,0,cv.width,cv.height); <br />
+            <br />
+            &emsp;// Draw Background<br />
+            &emsp;drawBg();<br />
+            <br />
+            &emsp;// Update Instances<br />
+            &emsp;for (var i = 0; i &lt; MAX_INSTANCES; ++i)<br />
+            &emsp;&emsp;if (inst[i] != null)<br />
+            &emsp;&emsp;&emsp;inst[i].ud();<br />
+            <br />
+            &emsp;// Spawn Asteroids<br />
+            &emsp;if (spawning &amp;&amp; (--spawnTime) &lt;= 0)<br />
+            &emsp;{<br />
+            &emsp;&emsp; // Spawn Asteroid<br />
+            &emsp;&emsp; var x = Math.random() * GAME_WIDTH;<br />
+            &emsp;&emsp; var y = Math.random() * GAME_HEIGHT;<br />
+            &emsp;&emsp; new makeInst(x, y, 3);<br />
+            &emsp;&emsp;// Reset Spawn Time<br />
+            &emsp;&emsp; spawnTimeReset -= SPAWN_TIME_DEC;<br />
+            &emsp;&emsp; if (spawnTimeReset &lt; SPAWN_TIME_MIN)<br />
+            &emsp;&emsp;&emsp; spawnTimeReset = SPAWN_TIME_MIN;<br />
+            &emsp;&emsp; spawnTime = spawnTimeReset;<br />
+            &emsp;}<br />
+            <br />
+            &emsp;// Keyboard Input<br />
+            &emsp;stopKeyRepeat();<br />
+            <br />
+            &emsp;// Show Framerate &amp; Score<br />
+            &emsp;updateFramerate();<br />
+            <br />
+            &emsp;c.fillStyle = TEXT_COLOR_GREEN;<br />
+            &emsp;c.font = "16px Courier";<br />
+            &emsp;c.textAlign = "left";<br />
+            &emsp;c.fillText("FPS: " + fps, 6, 16);<br />
+            &emsp;c.fillText("SCORE: " + score, 6, 32);<br />
+            &emsp;c.fillText("HISCORE: " + highScore, 6, 48);<br />
+            }<br />
+          </div>
+          <p>
+            Object instances are kept in the <b>inst</b> array. To update them,
+            the <b>inst</b> array is looped through, and the update function of
+            each instance, <b>ud</b>, is executed. The update functions contain
+            the code executed by each instance every frame. These usually
+            include moving the instance, checking for collisions, and drawing
+            the instance.
+          </p>
+          <p>
+            New object instances are created using the function
+            <b>makeInst</b> as a constructor. You can see this in action in the
+            code example above, where asteroids are spawned with this line:
+          </p>
+          <div class="code">new makeInst(x, y, 3);</div>
+          <p>
+            The third argument of <b>makeInst</b> is the ID of the object type
+            being created. 0 is used for the creation of the player's ship, 1 is
+            used for bullets, 2 is used for asteroids, and so forth. 3 is passed
+            to this <b>makeInst</b> in this example because it creates the alert
+            objects that flash for a few seconds before spawning an asteroid.
+          </p>
+          <p>Let's take a deeper look into the code of <b>makeInst</b>.</p>
+          <div class="code">
+            function makeInst(x, y, o)<br />
+            {<br />
+            &emsp;// Skip past instance indexes that are full or have persistent
+            objects<br />
+            &emsp;while (inst[instNext] != null &amp;&amp; inst[instNext].ps !=
+            null)<br />
+            &emsp;{<br />
+            &emsp;&emsp;if ((++instNext) &gt;= MAX_INSTANCES)<br />
+            &emsp;&emsp;instNext = 0;<br />
+            &emsp;}<br />
+            &emsp;<br />
+            &emsp;// Add instance to instance array<br />
+            &emsp;inst[instNext] = this;<br />
+            &emsp;this.id = instNext;<br />
+            &emsp;if ((++instNext) &gt;= MAX_INSTANCES)<br />
+            &emsp;&emsp;instNext = 0;<br />
+            &emsp;<br />
+            &emsp;// Set x &amp; y position<br />
+            &emsp;this.x = x;<br />
+            &emsp;this.y = y;<br />
+            &emsp;<br />
+            &emsp;this.o = o;<br />
+            &emsp; <br />
+            &emsp;// Execute object constructor<br />
+            &emsp;switch (o)<br />
+            &emsp;{<br />
+            &emsp;&emsp;case 0:<br />
+            &emsp;&emsp;{<br />
+            &emsp;&emsp;&emsp;this.xforces = new
+            Array(PLAYER_FORCE_COUNT).fill(0);<br />
+            &emsp;&emsp;&emsp;this.yforces = new
+            Array(PLAYER_FORCE_COUNT).fill(0);<br />
+            &emsp;&emsp;&emsp;this.force = 0;<br />
+            &emsp;&emsp;&emsp;this.forceSpeed = PLAYER_SPEED_FORCE;<br />
+            &emsp;&emsp;&emsp;this.turnSpeed = PLAYER_SPEED_TURN;<br />
+            &emsp;&emsp;&emsp;this.bulletSpeed = PLAYER_SPEED_BULLET;<br />
+            &emsp;&emsp;&emsp;this.shootCooldownReset = 10;<br />
+            &emsp;&emsp;&emsp;this.shootCooldown = 0;<br />
+            &emsp;&emsp;&emsp;this.dir = 0;<br />
+            &emsp;&emsp;&emsp;this.w = sSpaceship.width;<br />
+            &emsp;&emsp;&emsp;this.h = sSpaceship.height;<br />
+            &emsp;&emsp;&emsp;<br />
+            &emsp;&emsp;&emsp;this.worldWrap = oWorldWrap;<br />
+            &emsp;&emsp;&emsp;this.shoot = oSpaceshipShoot;<br />
+            &emsp;&emsp;&emsp;this.draw = oSpaceshipDraw;<br />
+            &emsp;&emsp;&emsp;this.drawWrap = oDrawWrap;<br />
+            &emsp;&emsp;&emsp;this.hit = oCollideWithLarger;<br />
+            &emsp;&emsp;&emsp;<br />
+            &emsp;&emsp;&emsp;this.ps = true;<br />
+            &emsp;&emsp;&emsp;this.ud = oSpaceshipUD;<br />
+            &emsp;&emsp;&emsp;break;<br />
+            &emsp;&emsp;}<br />
+            &emsp;&emsp;// More cases are in the source code but not shown
+            here<br />
+            &emsp;}<br />
+            }<br />
+          </div>
+          <p>
+            Object instances are added to the <b>inst</b> array as soon as the
+            <b>makeInst</b> function is called. If there is no room left in the
+            array for new instances, the instance being created will overwrite
+            another instance as long as the instance's <b>ps</b> variable, which
+            indicates persistence, is not set to <b>true</b>. The
+            object-specific variables and update function are determined by the
+            switch statement.
+          </p>
+          <p>
+            Sometimes different objects execute the same sets of code, such as
+            collision checking and screen wrapping. These are stored in
+            functions so that they don't have to be written over and over again
+            for each object. For an object instance to call these functions
+            properly, a reference to one of them must be stored in an instance
+            variable, and then called from that reference. This is demonstrated
+            in the following code:
+          </p>
+          <div class="code">
+            // Get a reference to the function<br />
+            this.shoot = oSpaceshipShoot;<br />
+            <br />
+            // Call the function<br />
+            this.shoot();<br />
+          </div>
+          <p>
+            Calling the function without a reference causes the keyword
+            <b>this</b> to not reference the object instance. It is valid to
+            call functions without a reference that do not need to reference the
+            instance calling the object, such as <b>gmEnd</b>, which simply ends
+            the game without accessing any instance variables, though this is
+            rarely done.
+          </p>
+          <p>
+            To summarize, <b>gameLoop</b> is called 60 times a second to draw a
+            new game frame and update object instances by calling their
+            <b>ud</b> function.
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

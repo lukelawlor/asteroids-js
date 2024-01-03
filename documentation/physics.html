@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentation Spaceship Physics | Coding Club Project</title>
+    <link rel="stylesheet" href="../assets/css/doc.css" />
+  </head>
+  <body>
+    <aside>
+      <div class="content-aside">
+        <h4><a href="doc.html">The Documentation :</a></h4>
+        <a href="canva.html">01. The Canvas</a><br />
+        <a href="drawing.html">02. Drawing</a><br />
+        <a href="input.html">03. Keyboard Input</a><br />
+        <a href="objects.html">04. Game Loop & Objects</a><br />
+        <a href="physics.html" class="active">05. Spaceship Physics</a><br />
+        <a href="wrapping.html">06. Screen Wrapping</a><br />
+        <a href="shooting.html">07. Shooting</a><br />
+        <a href="asteroids.html">08. Asteroids</a><br />
+        <a href="collision.html">09. Collision</a><br />
+        <a href="screens.html">10. Title/Game/End Screens</a><br />
+      </div>
+    </aside>
+    <div class="container">
+      <div class="content">
+        <div class="inner">
+          <h2 id="physics">Spaceship Physics</h2>
+          <p>
+            The spaceship object keeps track of the direction it points in with
+            its
+            <b>dir</b> variable, and keeps track of its momentum in two arrays,
+            <b>xforces</b> and <b>yforces</b>, both of equal length. When the up
+            key is held, the object adds the amount of pixels it should move
+            horizontally and vertically in <b>xforces</b> and
+            <b>yforces</b> respectively, this is calculated with sine and cosine
+            waves with the direction of the ship as input.
+          </p>
+          <div class="code">
+            // Move ship<br />
+            if (ku)<br />
+            {<br />
+            &emsp;this.xforces[this.force] = Math.cos(this.dir) *
+            this.forceSpeed;<br />
+            &emsp;this.yforces[this.force] = Math.sin(this.dir) *
+            this.forceSpeed;<br />
+            <br />
+            &emsp;++this.force;<br />
+            &emsp;if (this.force &gt;= PLAYER_FORCE_COUNT)<br />
+            &emsp;&emsp;this.force = 0;<br />
+            }<br />
+          </div>
+          <p>
+            The more the direction is turned to 0 or pi radians, the more the
+            ship will move horizontally, and the more the direction is turned to
+            pi/2 or 3pi/2 radians, the more the ship will move vertically. The
+            forces added are multipled by <b>forceSpeed</b> to control the speed
+            that the ship picks up each frame.
+          </p>
+          <p>
+            Indexes of the <b>xforces</b> and <b>yforces</b> arrays are accessed
+            with the variable <b>force</b>. Each time forces are added,
+            <b>force</b> increments to move to the next index, and loops back to
+            0 when the end of the arrays, stored in <b>PLAYER_FORCE_COUNT</b>,
+            are reached.
+          </p>
+          <p>
+            The forces are finally applied to the ship and move it in the loop
+            below, which is executed regardless of whether or not the up key is
+            held down.
+          </p>
+          <div class="code">
+            // Apply movement<br />
+            for (var i = 0; i &lt; PLAYER_FORCE_COUNT; ++i)<br />
+            {<br />
+            &emsp;this.x += this.xforces[i];<br />
+            &emsp;this.y += this.yforces[i];<br />
+            }<br />
+          </div>
+          <p>
+            In the end, this creates a system where forces applied in past
+            frames still move the ship until the ship either moves for long
+            enough that the forces are overwritten, or the ship moves in the
+            opposite direction to balance the force. This is why the ship
+            "drifts" ingame instead of staying still or immediately changing the
+            direction of movement once any amount of force is added.
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
