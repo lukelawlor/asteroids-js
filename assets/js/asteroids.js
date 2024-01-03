@@ -1,8 +1,6 @@
 // Constants
-const GAME_WIDTH = 800;
-const GAME_HEIGHT = 600;
-const GAME_WIDTH_HALF = GAME_WIDTH / 2;
-const GAME_HEIGHT_HALF = GAME_HEIGHT / 2;
+let GAME_WIDTH = 900;
+let GAME_HEIGHT = 700;
 
 const MAX_INSTANCES = 500; 
 
@@ -21,41 +19,71 @@ const SPAWN_TIME_MIN = 50;
 const TEXT_COLOR_WHITE = "#ffffff";
 const TEXT_COLOR_GREEN = "#88ff88";
 
+// Check disponible distance
+function getPositionAtCenter(element) {
+	const {top, left, width, height} = element.getBoundingClientRect();
+	return {
+		x: left + width / 2,
+		y: top + height / 2
+	};
+}
+
+function getDistanceBetweenElements(a, b) {
+ const aPosition = getPositionAtCenter(a);
+ const bPosition = getPositionAtCenter(b);
+
+ return Math.hypot(aPosition.x - bPosition.x, aPosition.y - bPosition.y);  
+}
+
+const distance = Math.floor(getDistanceBetweenElements(
+ document.getElementById("header"),
+ document.getElementById("footer")
+));
+
+const footer = document.getElementById('footer')
+const disponibleHeight = distance - (footer.clientHeight +footer.clientHeight*0.5)
+
+GAME_HEIGHT = disponibleHeight
+GAME_WIDTH = Math.floor(disponibleHeight *1.30)
+
+const GAME_WIDTH_HALF = GAME_WIDTH / 2;
+const GAME_HEIGHT_HALF = GAME_HEIGHT / 2;
+
 // Canvases
-var cv = document.getElementById("can");
+let cv = document.getElementById("can");
 cv.width = GAME_WIDTH;
 cv.height = GAME_HEIGHT;
-var c = cv.getContext("2d", {alpha: false});
+let c = cv.getContext("2d", {alpha: false});
 c.imageSmoothingEnabled = false;
 c.fillStyle = "#ffffff";
 
 // Global Game Variables
-var spawning = false;
-var spawnTimeReset = SPAWN_TIME_START;
-var spawnTime = spawnTimeReset;
-var score = 0;
-var highScore = 0;
-var bxt1 = 0;
-var byt1 = 0;
-var bxt2 = 0;
-var byt2 = 0;
+let spawning = false;
+let spawnTimeReset = SPAWN_TIME_START;
+let spawnTime = spawnTimeReset;
+let score = 0;
+let highScore = 0;
+let bxt1 = 0;
+let byt1 = 0;
+let bxt2 = 0;
+let byt2 = 0;
 
 // Instances
-var inst = new Array(MAX_INSTANCES);
-var instNext = 0;
+let inst = new Array(MAX_INSTANCES);
+let instNext = 0;
 
 // [I] Images
-var sSpaceship = new Image(); sSpaceship.src = "ship.png";
-var sBullet = new Image(); sBullet.src = "bullet.png";
-var sAsteroid = new Image(); sAsteroid.src = "asteroid.png";
-var sAlert1 = new Image(); sAlert1.src = "alert1.png";
-var sAlert2 = new Image(); sAlert2.src = "alert2.png";
-var sBg1 = new Image(); sBg1.src = "bg1.png";
-var sBg2 = new Image(); sBg2.src = "bg2.png";
+let sSpaceship = new Image(); sSpaceship.src = "../assets/img/ship.png";
+let sBullet = new Image(); sBullet.src = "../assets/img/bullet.png";
+let sAsteroid = new Image(); sAsteroid.src = "../assets/img/asteroid.png";
+let sAlert1 = new Image(); sAlert1.src = "../assets/img/alert1.png";
+let sAlert2 = new Image(); sAlert2.src = "../assets/img/alert2.png";
+let sBg1 = new Image(); sBg1.src = "../assets/img/bg1.png";
+let sBg2 = new Image(); sBg2.src = "../assets/img/bg2.png";
 
-var imagesLoaded = 0;
-var imagesNeeded = 7;
-var imagesToLoad = [sSpaceship, sBullet, sAsteroid, sAlert1, sAlert2, sBg1, sBg2];
+let imagesLoaded = 0;
+let imagesNeeded = 7;
+let imagesToLoad = [sSpaceship, sBullet, sAsteroid, sAlert1, sAlert2, sBg1, sBg2];
 
 function imageLoaded()
 {
@@ -63,13 +91,13 @@ function imageLoaded()
 		gmTitle();
 }
 
-for (var i = 0; i < imagesToLoad.length; ++i)
+for (let i = 0; i < imagesToLoad.length; ++i)
 {
 	imagesToLoad[i].onload = imageLoaded;
 }
 
 // Keyboard Input
-var kl = 0, kr = 0, ku = 0, kd = 0, k1 = 0, k2 = 0;
+let kl = 0, kr = 0, ku = 0, kd = 0, k1 = 0, k2 = 0;
 
 // Listen for keyboard input
 document.addEventListener("keydown", function(e)
@@ -105,9 +133,9 @@ function stopKeyRepeat()
 }
 
 // Framerate
-var frameLast = Date.now();
-var frameNow = frameLast;
-var fps = 0;
+let frameLast = Date.now();
+let frameNow = frameLast;
+let fps = 0;
 
 function updateFramerate()
 {
@@ -176,7 +204,7 @@ function makeInst(x, y, o)
 		}
 		case 2:
 		{
-			var speed = 2, dir = Math.random() * (Math.PI * 2);
+			let speed = 2, dir = Math.random() * (Math.PI * 2);
 			this.hsp = Math.cos(dir) * speed;
 			this.vsp = Math.sin(dir) * speed;
 			this.hp = 5;
@@ -244,7 +272,7 @@ function oSpaceshipUD()
 	}
 
 	// Apply movement	
-	for (var i = 0; i < PLAYER_FORCE_COUNT; ++i)
+	for (let i = 0; i < PLAYER_FORCE_COUNT; ++i)
 	{
 		this.x += this.xforces[i];
 		this.y += this.yforces[i];
@@ -274,7 +302,7 @@ function oSpaceshipUD()
 }
 function oSpaceshipShoot()
 {
-	var bullet = new makeInst(this.x, this.y, 1);
+	let bullet = new makeInst(this.x, this.y, 1);
 	bullet.hsp = Math.cos(this.dir) * this.bulletSpeed;
 	bullet.vsp = Math.sin(this.dir) * this.bulletSpeed;
 }
@@ -302,7 +330,7 @@ function oAsteroidUD()
 	this.worldWrap();
 
 	// Check for collision with a bullet
-	var hitby;
+	let hitby;
 	if ((hitby = this.hit(1, this.x - this.halfWidth, this.y - this.halfHeight, 64, 64, 0, 0, 10, 10)) != null)
 	{
 		if ((--this.hp) == 0)
@@ -388,12 +416,12 @@ function oWorldWrap()
 // Precondition: object has a draw() function
 function oDrawWrap()
 {
-	var xstop = this.x + GAME_WIDTH;
-	var ystop = this.y + GAME_HEIGHT;
+	let xstop = this.x + GAME_WIDTH;
+	let ystop = this.y + GAME_HEIGHT;
 
-	for (var x = this.x - GAME_WIDTH - 1; x <= xstop; x += GAME_WIDTH)
+	for (let x = this.x - GAME_WIDTH - 1; x <= xstop; x += GAME_WIDTH)
 	{
-		for (var y = this.y - GAME_HEIGHT - 1; y <= ystop; y += GAME_HEIGHT)
+		for (let y = this.y - GAME_HEIGHT - 1; y <= ystop; y += GAME_HEIGHT)
 		{
 			this.draw(x, y);
 		}
@@ -402,8 +430,8 @@ function oDrawWrap()
 
 function oCollideWithLarger(o, x1, y1, w1, h1, s1, s2, w2, h2)
 {	
-	var other; 
-	for (var i = 0; i < MAX_INSTANCES; ++i)
+	let other; 
+	for (let i = 0; i < MAX_INSTANCES; ++i)
 	{
 		other = inst[i];
 		if (other != null && other.o == o)
@@ -417,8 +445,8 @@ function oCollideWithLarger(o, x1, y1, w1, h1, s1, s2, w2, h2)
 
 function oCollideWithSmaller(o, x1, y1, w1, h1, s1, s2, w2, h2)
 {	
-	var other; 
-	for (var i = 0; i < MAX_INSTANCES; ++i)
+	let other; 
+	for (let i = 0; i < MAX_INSTANCES; ++i)
 	{
 		other = inst[i];
 		if (other != null && other.o == o)
@@ -434,10 +462,10 @@ function oCollideWithSmaller(o, x1, y1, w1, h1, s1, s2, w2, h2)
 // Pass the variables for the smaller rectangle first
 function checkRect(x1,y1,w1,h1,x2,y2,w2,h2)
 {
-	var x12 = x1 + w1;
-	var y12 = y1 + h1;
-	var x22 = x2 + w2;
-	var y22 = y2 + h2;
+	let x12 = x1 + w1;
+	let y12 = y1 + h1;
+	let x22 = x2 + w2;
+	let y22 = y2 + h2;
 
 	if (x1 >= x2 && x1 <= x22)
 	{
@@ -474,10 +502,10 @@ function checkRect(x1,y1,w1,h1,x2,y2,w2,h2)
 function drawBg()
 {
 	// Vars
-	var bw1 = sBg1.width;
-	var bh1 = sBg1.height;
-	var bw2 = sBg1.width;
-	var bh2 = sBg1.height;
+	let bw1 = sBg1.width;
+	let bh1 = sBg1.height;
+	let bw2 = sBg1.width;
+	let bh2 = sBg1.height;
 
 	// Increase ticks
 	if ((bxt1 += 0.3) > bw1)
@@ -491,17 +519,17 @@ function drawBg()
 		byt2 = 0;
 
 	// Draw
-	for (var x = -bw2 + bxt2; x < GAME_WIDTH + bw2; x += bw2)
+	for (let x = -bw2 + bxt2; x < GAME_WIDTH + bw2; x += bw2)
 	{
-		for (var y = -bh2 + byt2; y < GAME_HEIGHT + bh2; y += bh2)
+		for (let y = -bh2 + byt2; y < GAME_HEIGHT + bh2; y += bh2)
 		{
 			c.drawImage(sBg2, x, y);
 		}
 	}
 
-	for (var x = -bw1 + bxt1; x < GAME_WIDTH + bw1; x += bw1)
+	for (let x = -bw1 + bxt1; x < GAME_WIDTH + bw1; x += bw1)
 	{
-		for (var y = -bh1 + byt1; y < GAME_HEIGHT + bh1; y += bh1)
+		for (let y = -bh1 + byt1; y < GAME_HEIGHT + bh1; y += bh1)
 		{
 			c.drawImage(sBg1, x, y);
 		}
@@ -548,7 +576,7 @@ function gmLoop()
 	drawBg();
 	
 	// Update Instances
-	for (var i = 0; i < MAX_INSTANCES; ++i)
+	for (let i = 0; i < MAX_INSTANCES; ++i)
 		if (inst[i] != null)
 			inst[i].ud();
 	
@@ -556,8 +584,8 @@ function gmLoop()
 	if (spawning && (--spawnTime) <= 0)
 	{
 		// Spawn Asteroid
-		var x = Math.random() * GAME_WIDTH;
-		var y = Math.random() * GAME_HEIGHT;
+		let x = Math.random() * GAME_WIDTH;
+		let y = Math.random() * GAME_HEIGHT;
 		new makeInst(x, y, 3);
 
 		// Reset Spawn Time

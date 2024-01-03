@@ -1,0 +1,45 @@
+/* General */
+body{
+    background-color: #001145;
+    color: #ffffff;
+    background-image: url(../img/pagebg.png);
+}
+a{ color: #88ff88; }
+a:hover{ color: #ffffff; }
+a:active{ color: #88ff88; }
+
+/* Header */
+#header{
+    text-align: center;
+}
+
+/* Main */
+#main{
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 30px;
+    grid-row-gap: 0px;
+}
+#main .about-this-game, #main .how-to-play{
+    text-align: justify;
+}
+#main .about-this-game h2, #main .how-to-play h2{
+    text-align: center;
+}
+#can{
+    border: 1px solid #0000ff;
+}
+/* Footer */
+#footer{
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+#footer .image{
+    display: flex;
+}
