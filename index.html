@@ -23,25 +23,32 @@
 	</style>
 </head>
 <body>
-<div id="content">
-	<h1 id="gameTitle">Bad Asteroid Game</h1>
-	<h4 id="madeFromScratch">made from scratch (582 lines of JavaScript)</h4>
-	<h4 id="allCodeGfxAudio">All code, gfx, and audio by me, Finished Apr 10, 2022</h4>
-	<h4 id="audioNote">actually I ran out of time to add audio so scratch that last part</h4>
-	<canvas id="can" width="0" height="0">
-		Your browser does not support the HTML5 canvas.
-	</canvas>
+<div id="content" style="">
+	<div style="display: flex; flex-direction: row">
+		<div style="max-width: 350px;margin-left: auto;">
+			<h1 id="gameTitle">Bad Asteroid Game</h1>
+			<h4 id="madeFromScratch">made from scratch (582 lines of JavaScript)</h4>
+			<h4 id="allCodeGfxAudio">All code, gfx, and audio by me, Finished Apr 10, 2022</h4>
+			<h4 id="audioNote">actually I ran out of time to add audio so scratch that last part</h4>
+			<div class="vr"></div>
+			<h4 id="instructions">Left and Right to Turn, Up and Down to Move, Z to Shoot</h4>
+			<h4 id="translation"> Translation : </h4>
+			<button onclick="changeLanguage('fr')"><img src="assets/images/icons8-france-48.png" alt="fr"></button> <!-- Ajout du bouton avec le drapeau français -->
+			<button onclick="changeLanguage('en')"><img src="assets/images/icons8-united-kingdom-48.png" alt="fr"></button> <!-- Ajout du bouton avec le drapeau français -->
+			<div class="vr-big"></div>
+			<h2><a href="doc.html" id="learnHow">Learn how this works!</a></h2>
+
+		</div>
+		<canvas id="can" width="0" height="0" style="margin: 0 auto">
+			Your browser does not support the HTML5 canvas.
+		</canvas>
+	</div>
 	<div class="vr"></div>
-	<h4 id="instructions">Left and Right to Turn, Up and Down to Move, Z to Shoot</h4>
-	<div class="vr"></div>
-	<button onclick="changeLanguage('fr')">Français</button> <!-- Ajout du bouton avec le drapeau français -->
-	<button onclick="changeLanguage('en')">Anglais</button> <!-- Ajout du bouton avec le drapeau français -->
-	<div class="vr-big"></div>
-	<h2 ><a href="doc.html" id="learnHow">Learn how this works!</a></h2>
-	<div class="vr-big"></div>
-	<img src="assets/gif/vim.gif"><img src="assets/gif/linux.gif"><img src="assets/gif/firefox.gif">
-	<br>
-	<small id="developedWith" >developed with Vim under Linux, tested on Firefox (the right way)</small>
+	<div>
+		<img src="assets/gif/vim.gif"><img src="assets/gif/linux.gif"><img src="assets/gif/firefox.gif">
+		<br>
+		<small id="developedWith" >developed with Vim under Linux, tested on Firefox (the right way)</small>
+	</div>
 </div>
 <script src="js/asteroids.js"></script>
 </body>

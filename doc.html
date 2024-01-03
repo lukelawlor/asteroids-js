@@ -66,38 +66,41 @@
 <div id="gotop">
 	<a href="#top">Go to Top</a>
 </div>
-
+<div id="return">
+	<a href="index.html">Return to home page</a>
+</div>
 <div id="content"><div id="bars"><div id="inner">
 	<div class="center">
-		<h1>How The Game Works</h1>
-		<h4>This serves as the documentation for the game and also a tutorial you can follow along to make the game yourself, or make an entirely different game with its mechanics</h4>
+		<button onclick="changeLanguage('fr')"><img src="assets/images/icons8-france-48.png" alt="fr"></button> <!-- Ajout du bouton avec le drapeau français -->
+		<button onclick="changeLanguage('en')"><img src="assets/images/icons8-united-kingdom-48.png" alt="fr"></button> <!-- Ajout du bouton avec le drapeau français -->
+
+		<h1 id="titleHowGameWork">How The Game Works</h1>
+		<h4 id="descriptionHowGameWork">This serves as the documentation for the game and also a tutorial you can follow along to make the game yourself, or make an entirely different game with its mechanics</h4>
 	</div>
 		<div class="vr"></div>
 		<h4 id="sections">Skip to a Section:</h4>
-		<a href="#canvas">01. The Canvas</a><br>
-		<a href="#drawing">02. Drawing</a><br>
-		<a href="#input">03. Keyboard Input</a><br>
-		<a href="#objects">04. Game Loop & Objects</a><br>
-		<a href="#physics">05. Spaceship Physics</a><br>
-		<a href="#wrapping">06. Screen Wrapping</a><br>
-		<a href="#shooting">07. Shooting</a><br>
-		<a href="#asteroids">08. Asteroids</a><br>
-		<a href="#collision">09. Collision</a><br>
-		<a href="#screens">10. Title/Game/End Screens</a><br>
+		<a id="1" href="#canvas">01. The Canvas</a><br>
+		<a id="2" href="#drawing">02. Drawing</a><br>
+		<a id="3" href="#input">03. Keyboard Input</a><br>
+		<a id="4" href="#objects">04. Game Loop & Objects</a><br>
+		<a id="5" href="#physics">05. Spaceship Physics</a><br>
+		<a id="6" href="#wrapping">06. Screen Wrapping</a><br>
+		<a id="7" href="#shooting">07. Shooting</a><br>
+		<a id="8" href="#asteroids">08. Asteroids</a><br>
+		<a id="9" href="#collision">09. Collision</a><br>
+		<a id="10" href="#screens">10. Title/Game/End Screens</a><br>
 		<div class="vr-big"></div>
-		<a href="#canvas"><h2 id="canvas">The Canvas</h2></a>
-		<p>
-			Everything rendered in the game is done using the HTML5 Canvas. Canvases can be drawn to and cleared with JavaScript. You can create a canvas using the <b>canvas</b> HTML tag as shown below:
-		</p>
+		<a id="theCanvas" href="#canvas"><h2 id="canvas">The Canvas</h2></a>
+		<p id="textCanvas">Everything rendered in the game is done using the HTML5 Canvas. Canvases can be drawn to and cleared with JavaScript. You can create a canvas using the <b>canvas</b> HTML tag as shown below:</p>
 		<div class="code">
 &lt;canvas id="can" width="0" height="0"&gt;<br>
 &emsp;Your browser does not support the HTML5 canvas<br>
 &lt;/canvas&gt;<br>
 		</div>
-		<p>
+		<p id="textCanvas2">
 			The text inside the tag is shown if the client's browser is outdated and does not support the canvas. The <b>width</b> and <b>height</b> attributes specify the dimensions of the canvas in pixels. Notice that there is a distinction between these values and the CSS width and height of the canvas. In this example, the dimensions are set to 0x0 because they will be changed later with JS.
 		</p>
-		<p>
+		<p id="textCanvas3">
 			To interact with the canvas in JS, we must reference it with <b>document.getElementById()</b>. To draw to it, we must get the 2D context of the canvas.
 		</p>
 		<div class="code">
@@ -106,14 +109,13 @@ cv.width = GAME_WIDTH;<br>
 cv.height = GAME_HEIGHT;<br>
 var c = cv.getContext("2d", {alpha: false});<br>
 		</div>
-		<p>
-			The context of the canvas is obtained with <b>cv.getContext("2d", {alpha: false})</b>. Passing <b>{alpha: false}</b> removes the transparent background of the canvas to improve performance. It is optional. I named the context variable <b>c</b> so it can be typed easily, because we will be using it to draw to the canvas often.
+		<p id="textCanvas4">The context of the canvas is obtained with <b>cv.getContext("2d", {alpha: false})</b>. Passing <b>{alpha: false}</b> removes the transparent background of the canvas to improve performance. It is optional. I named the context variable <b>c</b> so it can be typed easily, because we will be using it to draw to the canvas often.
 		</p>
 
 	<div class="vr-big"></div>
 
 	<a href="#drawing"><h2 id="drawing">Drawing</h2></a>
-	<p>
+	<p id="textDrawing1">
 		Drawing to the canvas is done using the 2D context we obtained earlier. Image files can be drawn by passing an <b>Image</b> variable along with the <b>x</b> and <b>y</b> coordinates to draw to. Example:
 	</p>
 	<div class="code">
@@ -122,7 +124,7 @@ sImage.src = "path/to/image.png";<br>
 <br>
 c.drawImage(sImage, 0, 0);<br>
 	</div>
-	<p>
+	<p id="textDrawing2">
 		This will draw an image to the top left corner of the canvas (position 0,0). If you run this code unaltered, however, you likely won't see anything appear, because you must wait for images to load before drawing them. This can be done by setting the <b>onload</b> value of the image to a function that checks if all images you plan on using have loaded. This is how images are loaded in the game:
 	</p>
 	<div class="code">
@@ -141,10 +143,10 @@ for (var i = 0; i &lt; imagesToLoad.length; ++i)<br>
 &emsp;imagesToLoad[i].onload = imageLoaded;<br>
 }<br>
 	</div>
-	<p>
+	<p id="textDrawing3">
 		This code waits for all images to load, then calls <b>gmTitle()</b> which starts the game. Feel free to optimize this code if you plan on reusing it. I haven't optimized the code in this case because it has little impact on performance. What does have impact on performance, however, is drawing the images themselves.
 	</p>
-	<p>
+	<p id="textDrawing4">
 		To draw a rotated image (which is done with the spaceship), you must translate and rotate the canvas context before calling <b>drawImage</b>. In the game, this is done with this function:
 	</p>
 	<div class="code">
@@ -157,10 +159,10 @@ function oSpaceshipDraw(x, y)<br>
 &emsp;c.restore();<br>
 }<br>
 	</div>
-	<p>
+	<p id="textDrawing5">
 		<b>c.save()</b> saves the current state of the canvas context. Then, the context is translated by the x and y coordinates of the ship, and rotated. The x and y coordinates used in <b>drawImage</b> are relative to the x and y coordinates we translated the context by. In this case, the negatives of the half of the width and height of the ship are passed to position the ship in the center of the x and y coordinates we are drawing to. Finally, <b>c.restore()</b> is called, which undoes all of the translations and rotations, so that next time we draw something, it isn't translated and rotated somewhere random.
 	</p>
-	<p>
+	<p id="textDrawing6">
 		To avoid rotated image bluriness, as done in the game, the canvas context variable <b>imageSmoothingEnabled</b> must be set to <b>false</b>.
 	</p>
 	<div class="code">
@@ -170,13 +172,11 @@ c.imageSmoothingEnabled = false;
 	<div class="vr-big"></div>
 
 	<a href="#input"><h2 id="input">Keyboard Input</h2></a>
-	<p>
-		To detect keyboard input, two event listeners are added to the document that check for key presses and releases. These are added with the <b>document</b> function <b>addEventListener</b> which takes two parameters. These include a string specifying the type of event to listen for, in this case <b>"keydown"</b> or <b>"keyup"</b>, and a function to call when the event is activated, which an event object is automatically passed to.
-	</p>
-	<p>
+	<p id="inputText1">To detect keyboard input, two event listeners are added to the document that check for key presses and releases. These are added with the <b>document</b> function <b>addEventListener</b> which takes two parameters. These include a string specifying the type of event to listen for, in this case <b>"keydown"</b> or <b>"keyup"</b>, and a function to call when the event is activated, which an event object is automatically passed to.</p>
+	<p id="inputText2">
 		The <b>keyCode</b> variable of the event object contains an integer that represents the ID of the key being pressed or released. A switch statement is used to check which key code corresponds to which key variable. They key variables are set to 1 when activated in the <b>keydown</b> event and 0 in the <b>keyup</b> event.
 	</p>
-	<p>
+	<p id="inputText3">
 		To find the key code of a desired key, you can find a table online containing all key codes, or if you prefer to not visit any other sites, write a function yourself that prints the key code of the last pressed key.
 	</p>
 	<div class="code">
@@ -210,10 +210,10 @@ document.addEventListener("keyup", function(e)<br>
 &emsp;}<br>
 });<br>
 	</div>
-	<p>
+	<p id="inputText4">
 		Key codes <b>37</b> through <b>40</b> represent the arrow keys. When they are activated in the <b>keydown</b> event, the function <b>preventDefault</b> of the event object is called to prevent the default action of these keys, which scroll around the page. Without calling this function, the player would unintentionally scroll around the webpage when trying to play, which makes games nearly unplayable.
 	</p>
-	<p>
+	<p id="inputText5">
 		With these two <b>keydown</b> and <b>keyup</b> events we can now detect when keys are held down, but not when they are initially pressed. To implement key press detection, the function <b>stopKeyRepeat</b> is used, which simply sets the keys we only want to detect initial presses on to <b>0</b>.
 	</p>
 	<div class="code">
@@ -222,15 +222,15 @@ function stopKeyRepeat()<br>
 &emsp;k2 = 0;<br>
 }<br>
 	</div>
-	<p>
+	<p id="inputText6">
 		This function is called every game loop after objects are done updating. When the keys it affects are pressed and set to <b>1</b>, the game objects will run their update function once before the key is set back to <b>0</b>, only activated upon another initial press of the key. The game loop is a function that evaluates every game frame, and it will be explained in the next section.
 	</p>
 	<div class="vr-big"></div>
 	<a href="#objects"><h2 id="objects">Game Loop & Objects</h2></a>
-	<p>
+	<p id="objectsText1">
 		In the game, the game loop is contained in the function <b>gmLoop</b>. This function executes a single frame of the game, and then calls the function <b>requestAnimationFrame</b> to call itself again in 1/60 of a second, resulting in game frames being drawn at 60 frames per second.
 	</p>
-	<p>
+	<p id="objectsText2">
 		To render a frame, the <b>gmLoop</b> function clears the canvas, draws the background, executes the update function of all objects that may draw themselves, and finally executes more code that isn't tied to any object, including the spawning of asteroids and drawing of the current score.
 	</p>
 	<div class="code">
@@ -278,19 +278,19 @@ function gmLoop()<br>
 &emsp;c.fillText("HISCORE: " + highScore, 6, 48);<br>
 }<br>
 	</div>
-	<p>
+	<p id="objectsText3">
 		Object instances are kept in the <b>inst</b> array. To update them, the <b>inst</b> array is looped through, and the update function of each instance, <b>ud</b>, is executed. The update functions contain the code executed by each instance every frame. These usually include moving the instance, checking for collisions, and drawing the instance.
 	</p>
-	<p>
+	<p id="objectsText4">
 		New object instances are created using the function <b>makeInst</b> as a constructor. You can see this in action in the code example above, where asteroids are spawned with this line:
 	</p>
 	<div class="code">
 new makeInst(x, y, 3);
 	</div>
-	<p>
+	<p id="objectsText5">
 		The third argument of <b>makeInst</b> is the ID of the object type being created. 0 is used for the creation of the player's ship, 1 is used for bullets, 2 is used for asteroids, and so forth. 3 is passed to this <b>makeInst</b> in this example because it creates the alert objects that flash for a few seconds before spawning an asteroid.
 	</p>
-	<p>
+	<p id="objectsText6">
 		Let's take a deeper look into the code of <b>makeInst</b>.
 	</p>
 	<div class="code">
@@ -346,10 +346,10 @@ function makeInst(x, y, o)<br>
 &emsp;}<br>
 }<br>
 	</div>
-	<p>
+	<p id="objectsText7">
 		Object instances are added to the <b>inst</b> array as soon as the <b>makeInst</b> function is called. If there is no room left in the array for new instances, the instance being created will overwrite another instance as long as the instance's <b>ps</b> variable, which indicates persistence, is not set to <b>true</b>. The object-specific variables and update function are determined by the switch statement.
 	</p>
-	<p>
+	<p id="objectsText8">
 		Sometimes different objects execute the same sets of code, such as collision checking and screen wrapping. These are stored in functions so that they don't have to be written over and over again for each object. For an object instance to call these functions properly, a reference to one of them must be stored in an instance variable, and then called from that reference. This is demonstrated in the following code:
 	</p>
 	<div class="code">
@@ -359,15 +359,15 @@ this.shoot = oSpaceshipShoot;<br>
 // Call the function<br>
 this.shoot();<br>
 	</div>
-	<p>
+	<p id="objectsText9">
 		Calling the function without a reference causes the keyword <b>this</b> to not reference the object instance. It is valid to call functions without a reference that do not need to reference the instance calling the object, such as <b>gmEnd</b>, which simply ends the game without accessing any instance variables, though this is rarely done. 
 	</p>
-	<p>
+	<p id="objectsText10">
 		To summarize, <b>gameLoop</b> is called 60 times a second to draw a new game frame and update object instances by calling their <b>ud</b> function. 
 	</p>
 	<div class="vr-big"></div>
 	<a href="#physics"><h2 id="physics">Spaceship Physics</h2></a>
-	<p>
+	<p id="physicsText1">
 		The spaceship object keeps track of the direction it points in with its <b>dir</b> variable, and keeps track of its momentum in two arrays, <b>xforces</b> and <b>yforces</b>, both of equal length. When the up key is held, the object adds the amount of pixels it should move horizontally and vertically in <b>xforces</b> and <b>yforces</b> respectively, this is calculated with sine and cosine waves with the direction of the ship as input.
 	</p>
 	<div class="code">
@@ -382,13 +382,13 @@ if (ku)<br>
 &emsp;&emsp;this.force = 0;<br>
 }<br>
 	</div>
-	<p>
+	<p id="physicsText2">
 		The more the direction is turned to 0 or pi radians, the more the ship will move horizontally, and the more the direction is turned to pi/2 or 3pi/2 radians, the more the ship will move vertically. The forces added are multipled by <b>forceSpeed</b> to control the speed that the ship picks up each frame.
 	</p>
-	<p>
+	<p id="physicsText3">
 		Indexes of the <b>xforces</b> and <b>yforces</b> arrays are accessed with the variable <b>force</b>. Each time forces are added, <b>force</b> increments to move to the next index, and loops back to 0 when the end of the arrays, stored in <b>PLAYER_FORCE_COUNT</b>, are reached.
 	</p>
-	<p>
+	<p id="physicsText4">
 		The forces are finally applied to the ship and move it in the loop below, which is executed regardless of whether or not the up key is held down.
 	</p>
 	<div class="code">
@@ -399,12 +399,12 @@ for (var i = 0; i &lt; PLAYER_FORCE_COUNT; ++i)<br>
 &emsp;this.y += this.yforces[i];<br>
 }<br>
 	</div>
-	<p>
+	<p id="physicsText5">
 		In the end, this creates a system where forces applied in past frames still move the ship until the ship either moves for long enough that the forces are overwritten, or the ship moves in the opposite direction to balance the force. This is why the ship "drifts" ingame instead of staying still or immediately changing the direction of movement once any amount of force is added.
 	</p>
 	<div class="vr-big"></div>
 	<a href="#wrapping"><h2 id="wrapping">Screen Wrapping</h2></a>
-	<p>
+	<p id="wrappingText1">
 		To keep the player and asteroids within the bounds of the screen, the x and y values of the objects are reset once they reach the edge of the screen.
 	</p>
 	<div class="code">
@@ -421,10 +421,10 @@ function oWorldWrap()<br>
 &emsp;&emsp;this.y = GAME_HEIGHT + this.y;<br>
 }<br>
 	</div>
-	<p>
+	<p id="wrappingText2">
 		When the x and y values are reset, they are positioned relative to how far the object has move past the bounds of the screen. For example, if the screen with is 600 pixels and the object's x position is at 650, the x value will be reset to 0 plus 50 because it traveled 50 pixels beyond the screen. This results in no loss of movement when wrapping around the screen.
 	</p>
-	<p>
+	<p id="wrappingText3">
 		The code above properly handles the coordinates of objects, but we still need to draw objects while they are wrapping from one side of the screen to the next to make wrapping entirely seamless. This is accomplished by drawing the objects in all 8 directions around them with the following code:
 	</p>
 	<div class="code">
@@ -442,15 +442,15 @@ function oDrawWrap()<br>
 &emsp;}<br>
 }<br>
 	</div>
-	<p>
+	<p id="wrappingText4">
 		Each object is spaced horizontally by the screen width, and spaced vertically by the screen height. This effect causes objects to appear on top of the screen when wrapping from the bottom, on the left of the screen when wrapping from the right, and so forth.
 	</p>
-	<p>
+	<p id="wrappingText5">
 		This draws a total of 9 images, so it should be used sparingly, as drawing is a computationally expensive operation. It also has room for optimization, as it can be edited to only draw objects based on the direction they are moving in.
 	</p>
 	<div class="vr-big"></div>
 	<a href="#shooting"><h2 id="shooting">Shooting</h2></a>
-	<p>
+	<p id="shootingText1">
 		This section covers the mechanics of bullet firing by the spaceship object that the player controls. Bullets, like the spaceship itself, are objects created with <b>makeInst</b> that have speeds initialized upon their creation which go unchanged until the object is destroyed. The following function is used by spaceship instances to create them.
 	</p>
 	<div class="code">
@@ -461,10 +461,10 @@ function oSpaceshipShoot()<br>
 &emsp;bullet.vsp = Math.sin(this.dir) * this.bulletSpeed;<br>
 }<br>
 	</div>
-	<p>
+	<p id="shootingText2">
 		Bullets use two variables to move each frame, <b>hsp</b> and <b>vsp</b> which control the bullets' horizontal speed and vertical speed respectively. These are used instead of a direction and speed variable to control bullet movement because they only need to be calculated once, while direction calculations must be performed every frame to move a bullet. This improves performance, especially when many bullets objects are in action at once.
 	</p>
-	<p>
+	<p id="shootingText3">
 		The rate at which bullets are fired are dependent on two variables in the spaceship object, <b>shootCooldown</b> and <b>shootCooldownReset</b>. <b>shootCooldown</b> is decremented each frame in the spaceship's <b>ud</b> function until it reaches <b>0</b>. When the Z key is pressed or held at this point, a bullet will be fired, and <b>shootCooldown</b> will be set to <b>shootCooldownReset</b>. The player must wait until <b>shootCooldown</b> reaches <b>0</b> to fire another bullet, or let go of the Z key to immediately set the cooldown to <b>0</b>. Below is the code that the spaceship runs to perform all of this:
 	</p>
 	<div class="code">
@@ -485,16 +485,16 @@ else<br>
 }<br>
 	</div>
 	<a href="#asteroids"><h2 id="asteroids">Asteroids</h2></a>
-	<p>
+	<p id="asteroidsText1">
 		Asteroids are spawned by alert objects, which are spawned by an if statement found in <b>gmLoop</b> shown below. The spawning is influenced by three global variables: <b>spawning</b>, <b>spawnTime</b>, and <b>spawnTimeReset</b>. 
 	</p>
-	<p>
+	<p id="asteroidsText2">
 		<b>spawning</b> is a boolean that controls whether or not asteroids can spawn.
 	</p>
-	<p>
+	<p id="asteroidsText3">
 		<b>spawnTime</b> is an integer that decrements each frame until it reaches <b>0</b>, at which point an alert object will spawn.
 	</p>
-	<p>
+	<p id="asteroidsText4">
 		<b>spawnTimeReset</b> is the value that <b>spawnTime</b> is reset to upon reaching <b>0</b>, and it decreases by <b>SPAWN_TIME_DEC</b> each time an alert object is created. This shortens the amount of time between alert spawns until <b>spawnTimeReset</b> reaches the minimum spawn time, <b>SPAWN_TIME_MIN</b>.
 	</p>
 	<div class="code">
@@ -513,7 +513,7 @@ if (spawning &amp;&amp; (--spawnTime) &lt;= 0)<br>
 &emsp;spawnTime = spawnTimeReset;<br>
 }<br>
 	</div>
-	<p>
+	<p id="asteroidsText5">
 		Alert objects draw a blinking exclamation mark symbol onto the screen before spawning an asteroid. This is done to give the player time to react before each asteroid spawns. Their update function, shown below, is very simple:
 	</p>
 	<div class="code">
@@ -538,7 +538,7 @@ function oAlertUD()<br>
 &emsp;c.drawImage(this.frame1 ? sAlert1 : sAlert2, this.x, this.y);<br>
 }<br>
 	</div>
-	<p>
+	<p id="asteroidsText6">
 		Asteroids are also very simple. They wrap around the screen with the same functions as spaceships, and move similarly to bullets with <b>hsp</b> and <b>vsp</b> values, however, these variables are initialized in <b>makeInst</b> rather than being set by another instance, i.e., spaceship instances setting bullet speeds. Here is their update function:
 	</p>
 	<div class="code">
@@ -567,12 +567,12 @@ function oAsteroidUD()<br>
 &emsp;this.drawWrap();<br>
 }<br>
 	</div>
-	<p>
+	<p id="asteroidsText7">
 		The only complex piece of code is the collision checking for bullets, which will be explained in the next section.
 	</p>
 	<div class="vr-big"></div>
 	<a href="#collision"><h2 id="collision">Collision</h2></a>
-	<p>
+	<p id="collisionText1">
 		Collision between object instances is done with the function <b>checkRect</b>, which checks for a collision between two rectangles. It takes 8 parameters: the x, y, width, and height of two different rectangles, and returns a boolean. The only precondition is that the variables for the smaller rectangle is passed first.
 	</p>
 	<div class="code">
@@ -614,7 +614,7 @@ function checkRect(x1,y1,w1,h1,x2,y2,w2,h2)<br>
 &emsp;return false;<br>
 }<br>
 	</div>
-	<p>
+	<p id="collisionText2">
 		This function is used by another two functions: <b>oCollideWithSmaller</b> and <b>oCollideWithLarger</b>. These functions are called by object instances to check for collisions between all instances of another type of object. This is done by looping through <b>inst</b> to find all instances of the object type and calling <b>checkRect</b> with their variables. If a collision is found, the instance collided with is returned, otherwise <b>null</b> is returned. Here is <b>oCollideWithSmaller</b>:
 	</p>
 	<div class="code">
@@ -633,18 +633,18 @@ function oCollideWithSmaller(o, x1, y1, w1, h1, s1, s2, w2, h2)<br>
 &emsp;return null;<br>
 }<br>
 	</div>
-	<p>
+	<p id="collisionText3">
 		The function <b>oCollideWithLarger</b> is identical to <b>oCollideWithSmaller</b> except the order of rectangles passed to <b>checkRect</b> is reversed. This is because the functionality of <b>checkRect</b> depends on the smaller rectangle being passed first. The two "collide with" functions exist to check for collisions with objects that are smaller than the calling instance or larger.
 	</p>
-	<p>
+	<p id="collisionText4">
 		The reason two "collide with" functions exist despite much of their code being the same is to improve performance. If there was only one "collide with" function that required an extra if statement to determine which set of objects was smaller, performance would suffer, because that if statement would be run for every single instance of the object type being searched for.
 	</p>
 	<div class="vr-big"></div>
 	<a href="#screens"><h2 id="screens">Title/Game/End Screens</h2></a>
-	<p>
+	<p id="screensText1">
 		This section covers the code behind the multiple "screens" of the game, those being the title screen, gameplay screen, and game over screen.
 	</p>
-	<p>
+	<p id="screensText2">
 		The title screen is run by calling the function <b>gmTitle</b>. This simply creates a title screen object and starts the game loop.
 	</p>
 	<div class="code">
@@ -654,7 +654,7 @@ function gmTitle()<br>
 &emsp;gmLoop();<br>
 }<br>
 	</div>
-	<p>
+	<p id="screensText3">
 		The update function of the title object draws the title text and starts the game when enter is pressed by calling <b>gmStart</b>.
 	</p>
 	<div class="code">
@@ -674,7 +674,7 @@ function oTitleUD()<br>
 &emsp;&emsp;gmStart();<br>
 }<br>
 	</div>
-	<p>
+	<p id="screensText4">
 		The function <b>gmStart</b> destroys all object instances by filling <b>inst</b> with null values, starts the spawning of asteroids, sets the score to <b>0</b>, and creates a spaceship object.
 	</p>
 	<div class="code">
@@ -688,7 +688,7 @@ function gmStart()<br>
 &emsp;new makeInst(100, 80, 0);<br>
 }<br>
 	</div>
-	<p>
+	<p id="screensText5">
 		The final screen changing function is <b>gmEnd</b>. This destroys all object instances, records the high score, stops the spawning of asteroids, and creates a game over screen object.
 	</p>
 	<div class="code">
@@ -701,7 +701,7 @@ function gmEnd()<br>
 &emsp;new makeInst(0, 0, 5);<br>
 }<br>
 	</div>
-	<p>
+	<p id="screensText6">
 		The game over screen object draws the game over text and restarts the game by calling <b>gmStart</b>, just as the title screen object does.
 	</p>
 	<div class="code">
@@ -724,14 +724,346 @@ function oEndUD()<br>
 	<div class="vr-big"></div>
 	
 	<div class="center">
-		You've reached the end of this tutorial-ish thing!<br>
-		Hopefully you learned something!<br><br>
-		<a href="index.html">Go back to the game</a>
+		<p id="end">You've reached the end of this tutorial-ish thing!<br>
+			Hopefully you learned something!</p><br><br>
+		<a id="returnGame" href="index.html">Go back to the game</a>
 		
 		<div class="vr-big"></div>
 		<img src="assets/gif/vim.gif"><img src="assets/gif/linux.gif"><img src="assets/gif/firefox.gif">
 		<br>
-		<small>Vim good Linux good Firefox somewhat good</small>
+		<small id="vim">Vim good Linux good Firefox somewhat good</small>
 	</div>
-</div></div></div></body>
+</div></div></div>
+<script>
+	function changeLanguage(language) {
+		if (language === 'fr') {
+			document.getElementById("titleHowGameWork").innerHTML = "Comment fonctionne le jeu";
+			document.getElementById("descriptionHowGameWork").innerHTML = "Ceci sert de documentation pour le jeu et également d'un tutoriel que vous pouvez suivre pour créer le jeu vous-même, ou créer un jeu entièrement différent avec ses mécanismes";
+			document.getElementById("1").innerHTML = "01. Le Canvas";
+			document.getElementById("2").innerHTML = "02. Dessiner";
+			document.getElementById("3").innerHTML = "03. Entrée clavier";
+			document.getElementById("4").innerHTML = "04. Boucle de jeu et objets";
+			document.getElementById("5").innerHTML = "05. Physique du vaisseau spatial";
+			document.getElementById("6").innerHTML = "06. Enveloppement de l'écran";
+			document.getElementById("7").innerHTML = "07. Tir";
+			document.getElementById("8").innerHTML = "08. Astéroïdes";
+			document.getElementById("9").innerHTML = "09. Collision";
+			document.getElementById("10").innerHTML = "10. Écrans de titre/jeu/fin";
+
+			document.getElementById("canvas").innerHTML = "Le Canvas";
+			document.getElementById("textCanvas").innerHTML = `Tout ce qui est rendu dans le jeu est fait en utilisant le Canvas HTML5. Les canvas peuvent être dessinés et effacés avec JavaScript. Vous pouvez créer un canvas en utilisant la balise <b>canvas</b> comme indiqué ci-dessous :`;
+			document.getElementById("textCanvas2").innerHTML = `Le texte à l'intérieur de la balise est affiché si le navigateur du client est obsolète et ne prend pas en charge le canvas. Les attributs <b>width</b> et <b>height</b> spécifient les dimensions du canvas en pixels. Remarquez qu'il existe une distinction entre ces valeurs et la largeur et la hauteur CSS du canvas. Dans cet exemple, les dimensions sont définies à 0x0 car elles seront modifiées plus tard avec JS.`;
+			document.getElementById("textCanvas3").innerHTML = `Pour interagir avec le canvas en JS, nous devons le référencer avec <b>document.getElementById()</b>. Pour y dessiner, nous devons obtenir le contexte 2D du canvas.`;
+			document.getElementById("textCanvas4").innerHTML = `Le contexte du canvas est obtenu avec <b>cv.getContext("2d", {alpha: false})</b>. En passant <b>{alpha: false}</b>, on supprime l'arrière-plan transparent du canvas pour améliorer les performances. C'est optionnel. J'ai nommé la variable de contexte <b>c</b> pour qu'elle puisse être tapée facilement, car nous l'utiliserons souvent pour dessiner sur le canvas.`;
+
+			document.getElementById("drawing").innerHTML = "Dessin";
+			document.getElementById("textDrawing1").innerHTML = `Le dessin sur le canvas se fait à l'aide du contexte 2D que nous avons obtenu précédemment. Les fichiers image peuvent être dessinés en passant une variable <b>Image</b> ainsi que les coordonnées <b>x</b> et <b>y</b> où dessiner. Exemple :`;
+			document.getElementById("textDrawing2").innerHTML = `Cela dessinera une image dans le coin supérieur gauche du canvas (position 0,0). Cependant, si vous exécutez ce code tel quel, vous ne verrez probablement rien apparaître, car vous devez attendre le chargement des images avant de les dessiner. Cela peut être fait en définissant la valeur <b>onload</b> de l'image sur une fonction qui vérifie si toutes les images que vous prévoyez d'utiliser ont été chargées. C'est ainsi que les images sont chargées dans le jeu :`;
+			document.getElementById("textDrawing3").innerHTML = `Ce code attend que toutes les images soient chargées, puis appelle <b>gmTitle()</b>, qui lance le jeu. N'hésitez pas à optimiser ce code si vous prévoyez de le réutiliser. Je n'ai pas optimisé le code dans ce cas car cela a peu d'impact sur les performances. Ce qui a un impact sur les performances, cependant, c'est le dessin des images elles-mêmes.`;
+			document.getElementById("textDrawing4").innerHTML = `Pour dessiner une image tournée (ce qui est fait avec le vaisseau spatial), vous devez traduire et faire pivoter le contexte du canvas avant d'appeler <b>drawImage</b>. Dans le jeu, cela se fait avec cette fonction :`;
+			document.getElementById("textDrawing5").innerHTML = `<b>c.save()</b> sauvegarde l'état actuel du contexte du canvas. Ensuite, le contexte est traduit par les coordonnées x et y du vaisseau, et tourné. Les coordonnées x et y utilisées dans <b>drawImage</b> sont relatives aux coordonnées x et y que nous avons traduites avec le contexte. Dans ce cas, les négatifs de la moitié de la largeur et de la hauteur du vaisseau sont passés pour positionner le vaisseau au centre des coordonnées x et y où nous dessinons. Enfin, <b>c.restore()</b> est appelé, ce qui annule toutes les traductions et rotations, afin que la prochaine fois que nous dessinions quelque chose, il ne soit pas traduit et tourné quelque part au hasard.`;
+			document.getElementById("textDrawing6").innerHTML = `Pour éviter le flou des images tournées, comme dans le jeu, la variable de contexte du canvas <b>imageSmoothingEnabled</b> doit être définie sur <b>false</b>.`;
+
+			document.getElementById("input").innerHTML = "Saisie au clavier";
+			document.getElementById("inputText1").innerHTML = `Pour détecter la saisie au clavier, deux écouteurs d'événements sont ajoutés au document pour vérifier les pressions et les relâchements de touches. Cela se fait avec la fonction <b>addEventListener</b> de <b>document</b>, qui prend deux paramètres. Il s'agit d'une chaîne spécifiant le type d'événement à écouter, dans ce cas <b>"keydown"</b> ou <b>"keyup"</b>, et d'une fonction à appeler lorsque l'événement est activé, à laquelle un objet d'événement est automatiquement transmis.`;
+			document.getElementById("inputText2").innerHTML = `
+La variable <b>keyCode</b> de l'objet d'événement contient un entier qui représente l'ID de la touche pressée ou relâchée. Une instruction switch est utilisée pour vérifier quel code de touche correspond à quelle variable de touche. Les variables de touche sont définies sur 1 lorsqu'elles sont activées dans l'événement <b>keydown</b> et sur 0 dans l'événement <b>keyup</b>.
+`;
+			document.getElementById("inputText3").innerHTML = `Pour trouver le code d'une touche désirée, vous pouvez consulter une table en ligne contenant tous les codes de touche, ou si vous préférez ne pas visiter d'autres sites, écrire vous-même une fonction qui affiche le code de la dernière touche pressée.`;
+			document.getElementById("inputText4").innerHTML = `
+Les codes de touche <b>37</b> à <b>40</b> représentent les touches fléchées. Lorsqu'elles sont activées dans l'événement <b>keydown</b>, la fonction <b>preventDefault</b> de l'objet d'événement est appelée pour empêcher l'action par défaut de ces touches, qui fait défiler la page. Sans appeler cette fonction, le joueur ferait défiler involontairement la page Web en essayant de jouer, ce qui rendrait les jeux presque injouables.
+`;
+			document.getElementById("inputText5").innerHTML = `
+Avec ces deux événements <b>keydown</b> et <b>keyup</b>, nous pouvons maintenant détecter quand les touches sont maintenues enfoncées, mais pas quand elles sont initialement pressées. Pour implémenter la détection de pression de touche, la fonction <b>stopKeyRepeat</b> est utilisée, qui définit simplement les touches que nous voulons détecter initialement à <b>0</b>.
+`;
+			document.getElementById("inputText6").innerHTML = `
+Cette fonction est appelée à chaque boucle de jeu après la mise à jour des objets. Lorsque les touches qu'elle affecte sont pressées et définies sur <b>1</b>, les objets de jeu exécuteront leur fonction de mise à jour une fois avant que la touche ne soit à nouveau définie sur <b>0</b>, activée uniquement lors d'une autre pression initiale de la touche. La boucle de jeu est une fonction qui évalue chaque image du jeu, et elle sera expliquée dans la section suivante.
+`;
+
+			document.getElementById("objects").innerHTML = "Boucle de jeu et objets";
+			document.getElementById("objectsText1").innerHTML = `
+Dans le jeu, la boucle de jeu est contenue dans la fonction <b>gmLoop</b>. Cette fonction exécute une seule image du jeu, puis appelle la fonction <b>requestAnimationFrame</b> pour s'appeler elle-même à nouveau en 1/60 de seconde, ce qui donne des images de jeu dessinées à 60 images par seconde.
+`;
+			document.getElementById("objectsText1").innerHTML = `
+Dans le jeu, la boucle de jeu est contenue dans la fonction <b>gmLoop</b>. Cette fonction exécute une seule image du jeu, puis appelle la fonction <b>requestAnimationFrame</b> pour s'appeler elle-même à nouveau en 1/60 de seconde, ce qui donne des images de jeu dessinées à 60 images par seconde.
+`;
+			document.getElementById("objectsText2").innerHTML = `
+Pour rendre une image, la fonction <b>gmLoop</b> efface le canvas, dessine l'arrière-plan, exécute la fonction de mise à jour de tous les objets qui peuvent se dessiner eux-mêmes, puis exécute finalement plus de code qui n'est pas lié à un objet particulier, y compris le spawn des astéroïdes et le dessin du score actuel.
+`;
+			document.getElementById("objectsText3").innerHTML = `
+Les instances d'objets sont conservées dans le tableau <b>inst</b>. Pour les mettre à jour, le tableau <b>inst</b> est parcouru, et la fonction de mise à jour de chaque instance, <b>ud</b>, est exécutée. Les fonctions de mise à jour contiennent le code exécuté par chaque instance à chaque image. Il s'agit généralement du déplacement de l'instance, de la vérification des collisions et du dessin de l'instance.
+`;
+			document.getElementById("objectsText4").innerHTML = `
+De nouvelles instances d'objets sont créées à l'aide de la fonction <b>makeInst</b> en tant que constructeur. Vous pouvez voir cela en action dans l'exemple de code ci-dessus, où les astéroïdes sont créés avec cette ligne :
+`;
+			document.getElementById("objectsText5").innerHTML = `
+Le troisième argument de <b>makeInst</b> est l'ID du type d'objet en cours de création. 0 est utilisé pour la création du vaisseau spatial du joueur, 1 est utilisé pour les balles, 2 est utilisé pour les astéroïdes, et ainsi de suite. 3 est passé à ce <b>makeInst</b> dans cet exemple car il crée les objets d'alerte qui clignotent pendant quelques secondes avant de faire apparaître un astéroïde.
+`;
+			document.getElementById("objectsText6").innerHTML = `
+Jetons un coup d'œil plus approfondi au code de <b>makeInst</b>.
+`;
+			document.getElementById("objectsText7").innerHTML = `
+Les instances d'objets sont ajoutées au tableau <b>inst</b> dès que la fonction <b>makeInst</b> est appelée. S'il n'y a plus de place dans le tableau pour de nouvelles instances, l'instance en cours de création écrasera une autre instance tant que la variable <b>ps</b>, qui indique la persistance, n'est pas définie sur <b>true</b>. Les
+`
+			document.getElementById("objectsText8").innerHTML = `Parfois, différents objets exécutent les mêmes ensembles de code, tels que la vérification des collisions et l'enveloppement d'écran. Ces fonctions sont stockées dans des fonctions afin qu'elles n'aient pas à être réécrites à maintes reprises pour chaque objet. Pour qu'une instance d'objet appelle ces fonctions correctement, une référence à l'une d'entre elles doit être stockée dans une variable d'instance, puis appelée à partir de cette référence. Cela est démontré dans le code suivant :`;
+			document.getElementById("objectsText9").innerHTML = `
+Appeler la fonction sans référence fait en sorte que le mot clé <b>this</b> ne fasse pas référence à l'instance d'objet. Il est valable d'appeler des fonctions sans référence qui n'ont pas besoin de faire référence à l'instance appelant l'objet, comme <b>gmEnd</b>, qui met simplement fin au jeu sans accéder à des variables d'instance, bien que cela soit rarement fait.
+`;
+			document.getElementById("objectsText10").innerHTML = `
+Pour résumer, <b>gameLoop</b> est appelé 60 fois par seconde pour dessiner une nouvelle image de jeu et mettre à jour les instances d'objets en appelant leur fonction <b>ud</b>.
+`;
+
+			document.getElementById("physics").innerHTML = "Physique du vaisseau spatial";
+			document.getElementById("physicsText1").innerHTML = `
+L'objet du vaisseau spatial garde une trace de la direction dans laquelle il pointe avec sa variable <b>dir</b>, et garde une trace de son élan dans deux tableaux, <b>xforces</b> et <b>yforces</b>, tous deux de longueur égale. Lorsque la touche vers le haut est maintenue enfoncée, l'objet ajoute la quantité de pixels qu'il devrait se déplacer horizontalement et verticalement dans <b>xforces</b> et <b>yforces</b> respectivement, cela est calculé avec des ondes sinusoïdales avec la direction du vaisseau en tant qu'entrée.
+`;
+			document.getElementById("physicsText2").innerHTML = `
+Plus la direction est tournée vers 0 ou pi radians, plus le vaisseau se déplacera horizontalement, et plus la direction est tournée vers pi/2 ou 3pi/2 radians, plus le vaisseau se déplacera verticalement.
+`;
+			document.getElementById("physicsText3").innerHTML = `
+Les indices des tableaux <b>xforces</b> et <b>yforces</b> sont accessibles avec la variable <b>force</b>. À chaque fois que des forces sont ajoutées, <b>force</b> s'incrémente pour passer à l'indice suivant, et boucle de nouveau à 0 lorsque la fin des tableaux, stockée dans <b>PLAYER_FORCE_COUNT</b>, est atteinte.
+`;
+			document.getElementById("physicsText4").innerHTML = `
+Les forces sont finalement appliquées au vaisseau et le déplacent dans la boucle ci-dessous, qui est exécutée que la touche vers le haut soit maintenue enfoncée ou non.
+`;
+			document.getElementById("physicsText5").innerHTML = `
+En fin de compte, cela crée un système où les forces appliquées dans les images précédentes déplacent toujours le vaisseau jusqu'à ce que le vaisseau se déplace suffisamment longtemps pour que les forces soient écrasées, ou que le vaisseau se déplace dans la direction opposée pour équilibrer la force. C'est pourquoi le vaisseau "dérive" dans le jeu au lieu de rester immobile ou de changer immédiatement la direction du mouvement une fois qu'une quantité de force a été ajoutée.
+`;
+
+			document.getElementById("wrapping").innerHTML = "Enveloppement d'écran";
+			document.getElementById("wrappingText1").innerHTML = `
+Pour garder le joueur et les astéroïdes dans les limites de l'écran, les valeurs x et y des objets sont réinitialisées lorsqu'ils atteignent le bord de l'écran.
+`;
+			document.getElementById("wrappingText2").innerHTML = `
+Lorsque les valeurs x et y sont réinitialisées, elles sont positionnées par rapport à la distance parcourue par l'objet au-delà du bord de l'écran. Par exemple, si la largeur de l'écran est de 600 pixels et que la position x de l'objet est de 650, la valeur x sera réinitialisée à 0 plus 50 car elle a parcouru 50 pixels au-delà de l'écran. Cela évite toute perte de mouvement lors de l'enveloppement autour de l'écran.
+`;
+			document.getElementById("wrappingText3").innerHTML = `
+Le code ci-dessus gère correctement les coordonnées des objets, mais nous devons toujours dessiner les objets pendant qu'ils s'enveloppent d'un côté de l'écran à l'autre pour rendre l'enveloppement totalement transparent. Cela est accompli en dessinant les objets dans les 8 directions autour d'eux avec le code suivant :
+`;
+			document.getElementById("wrappingText4").innerHTML = `
+Chaque objet est espacé horizontalement par la largeur de l'écran et espacé verticalement par la hauteur de l'écran. Cela fait en sorte que les objets apparaissent en haut de l'écran lorsqu'ils s'enveloppent par le bas, à gauche de l'écran lorsqu'ils s'enveloppent par la droite, et ainsi de suite.
+`;
+			document.getElementById("wrappingText5").innerHTML = `
+Cela dessine un total de 9 images, il doit donc être utilisé avec parcimonie, car le dessin est une opération informatiquement coûteuse. Il y a également place à l'optimisation, car il peut être modifié pour ne dessiner que les objets en fonction de la direction dans laquelle ils se déplacent.
+`;
+
+			document.getElementById("shooting").innerHTML = "Tir";
+			document.getElementById("shootingText1").innerHTML = `
+Cette section couvre les mécanismes du tir de balles par l'objet du vaisseau spatial que le joueur contrôle. Les balles, comme le vaisseau spatial lui-même, sont des objets créés avec <b>makeInst</b> qui ont des vitesses initialisées lors de leur création et qui ne changent pas tant que l'objet n'est pas détruit. La fonction suivante est utilisée par les instances de vaisseau spatial pour les créer.
+`;
+			document.getElementById("shootingText2").innerHTML = `Les balles utilisent deux variables pour se déplacer à chaque image, <b>hsp</b> et <b>vsp</b>, qui contrôlent respectivement la vitesse horizontale et la vitesse verticale des balles. Celles-ci sont utilisées au lieu d'une direction et d'une variable de vitesse pour contrôler le mouvement des balles, car elles n'ont besoin d'être calculées qu'une fois, tandis que les calculs de direction doivent être effectués à chaque image pour déplacer une balle. Cela améliore les performances, en particulier lorsque de nombreuses instances d'objets sont en action en même temps.`;
+			document.getElementById("shootingText3").innerHTML = `Le taux auquel les balles sont tirées dépend de deux variables de l'objet de vaisseau spatial, <b>shootCooldown</b> et <b>shootCooldownReset</b>. <b>shootCooldown</b> est décrémenté à chaque image dans la fonction <b>ud</b> du vaisseau spatial jusqu'à ce qu'il atteigne <b>0</b>. Lorsque la touche Z est pressée ou maintenue enfoncée à ce moment-là, une balle sera tirée, et <b>shootCooldown</b> sera défini sur <b>shootCooldownReset</b>. Le joueur doit attendre que <b>shootCooldown</b> atteigne <b>0</b> pour tirer une autre balle, ou relâcher la touche Z pour immédiatement réinitialiser le cooldown à <b>0</b>. Voici le code que le vaisseau spatial exécute pour effectuer tout cela :`;
+			document.getElementById("asteroids").innerHTML = "Asteroids";
+			document.getElementById("asteroidsText1").innerHTML = `
+Les astéroïdes sont générés par des objets d'alerte, qui sont créés par une instruction conditionnelle trouvée dans la fonction <b>gmLoop</b> ci-dessous. La génération est influencée par trois variables globales : <b>spawning</b>, <b>spawnTime</b>, et <b>spawnTimeReset</b>.
+`
+			document.getElementById("asteroidsText2").innerHTML = `
+<b>spawning</b> est un booléen qui contrôle si les astéroïdes peuvent apparaître ou non.
+`
+			document.getElementById("asteroidsText3").innerHTML = `
+<b>spawnTime</b> est un entier qui décrémente à chaque image jusqu'à ce qu'il atteigne <b>0</b>, moment où un objet d'alerte apparaîtra.
+`
+			document.getElementById("asteroidsText4").innerHTML = `
+<b>spawnTimeReset</b> est la valeur à laquelle <b>spawnTime</b> est réinitialisé lorsqu'il atteint <b>0</b>, et il diminue de <b>SPAWN_TIME_DEC</b> à chaque création d'un objet d'alerte. Cela réduit le temps entre les apparitions d'alertes jusqu'à ce que <b>spawnTimeReset</b> atteigne le temps minimum d'apparition, <b>SPAWN_TIME_MIN</b>.
+`
+			document.getElementById("asteroidsText5").innerHTML = `Les objets d'alerte dessinent un point d'exclamation clignotant sur l'écran avant de générer un astéroïde. Cela donne au joueur le temps de réagir avant que chaque astéroïde n'apparaisse. Leur fonction de mise à jour, montrée ci-dessous, est très simple :`
+			document.getElementById("asteroidsText6").innerHTML = `
+Les astéroïdes sont également très simples. Ils bouclent autour de l'écran avec les mêmes fonctions que les vaisseaux spatiaux et se déplacent de manière similaire aux balles avec les valeurs de <b>hsp</b> et <b>vsp</b>, cependant, ces variables sont initialisées dans <b>makeInst</b> plutôt que d'être définies par une autre instance, c'est-à-dire, des instances de vaisseaux spatiaux définissant les vitesses des balles. Voici leur fonction de mise à jour :
+`
+			document.getElementById("asteroidsText7").innerHTML = `La seule partie complexe du code concerne la vérification des collisions avec les balles, ce qui sera expliqué dans la section suivante.`
+
+			document.getElementById("collision").innerHTML = "Collision";
+			document.getElementById("collisionText1").innerHTML = `
+La collision entre les instances d'objets est effectuée avec la fonction <b>checkRect</b>, qui vérifie une collision entre deux rectangles. Elle prend 8 paramètres : les x, y, largeurs et hauteurs de deux rectangles différents, et renvoie un booléen. La seule condition préalable est que les variables pour le rectangle plus petit soient passées en premier.
+`
+			document.getElementById("collisionText2").innerHTML = `
+Cette fonction est utilisée par deux autres fonctions : <b>oCollideWithSmaller</b> et <b>oCollideWithLarger</b>. Ces fonctions sont appelées par des instances d'objets pour vérifier les collisions entre toutes les instances d'un autre type d'objet. Cela se fait en parcourant <b>inst</b> pour trouver toutes les instances du type d'objet et en appelant <b>checkRect</b> avec leurs variables. Si une collision est trouvée, l'instance avec laquelle il y a collision est renvoyée, sinon <b>null</b> est renvoyé. Voici <b>oCollideWithSmaller</b> :
+`
+			document.getElementById("collisionText3").innerHTML = `
+La fonction <b>oCollideWithLarger</b> est identique à <b>oCollideWithSmaller</b> sauf que l'ordre des rectangles passés à <b>checkRect</b> est inversé. Cela est dû au fait que la fonctionnalité de <b>checkRect</b> dépend du fait que le rectangle plus petit soit passé en premier. Les deux fonctions "collide with" existent pour vérifier les collisions avec des objets qui sont plus petits ou plus grands que l'instance appelante.
+`
+			document.getElementById("collisionText4").innerHTML = `La raison pour laquelle deux fonctions "collide with" existent malgré une grande partie de leur code étant identique est d'améliorer les performances. S'il n'y avait qu'une seule fonction "collide with" qui nécessitait une instruction conditionnelle supplémentaire pour déterminer quel ensemble d'objets était plus petit, les performances en souffriraient, car cette instruction conditionnelle serait exécutée pour chaque instance de l'objet recherché.`
+
+			document.getElementById("screens").innerHTML = "Écrans de titre/jeu/fin";
+			document.getElementById("screensText1").innerHTML = `Cette section couvre le code derrière les différents "écrans" du jeu, à savoir l'écran de titre, l'écran de jeu et l'écran de fin de jeu.`
+			document.getElementById("screensText2").innerHTML = `
+L'écran de titre est lancé en appelant la fonction <b>gmTitle</b>. Cela crée simplement un objet d'écran de titre et lance la boucle de jeu.
+`
+			document.getElementById("screensText3").innerHTML = `
+La fonction de mise à jour de l'objet d'écran de titre dessine le texte du titre et lance le jeu lorsque la touche Entrée est pressée en appelant <b>gmStart</b>.
+`
+			document.getElementById("screensText4").innerHTML = `
+La fonction <b>gmStart</b> détruit toutes les instances d'objets en remplissant <b>inst</b> avec des valeurs nulles, démarre la génération d'astéroïdes, initialise le score à <b>0</b> et crée un objet de vaisseau spatial.
+`
+			document.getElementById("screensText5").innerHTML = `
+La dernière fonction de changement d'écran est <b>gmEnd</b>. Cela détruit toutes les instances d'objets, enregistre le meilleur score, arrête la génération d'astéroïdes et crée un objet d'écran de fin de jeu.
+`
+			document.getElementById("screensText6").innerHTML = `
+L'objet d'écran de fin de jeu dessine le texte de fin de jeu et redémarre le jeu en appelant <b>gmStart</b>, tout comme l'objet d'écran de titre le fait.`
+
+			document.getElementById("end").innerHTML = "Vous avez atteint la fin de ce tutoriel en quelque sorte ! J'espère que vous avez appris quelque chose !"
+			document.getElementById("returnGame").innerHTML = "Revenir au jeu"
+			document.getElementById("vim").innerHTML = "Vim bon, Linux bon, Firefox assez bon"
+
+		} else if (language === 'en') {
+			document.getElementById("titleHowGameWork").innerHTML = "How The Game Works";
+			document.getElementById("descriptionHowGameWork").innerHTML = "This serves as the documentation for the game and also a tutorial you can follow along to make the game yourself, or make an entirely different game with its mechanics";
+			document.getElementById("1").innerHTML = "01. The Canvas";
+			document.getElementById("2").innerHTML = "02. Drawing";
+			document.getElementById("3").innerHTML = "03. Keyboard Input";
+			document.getElementById("4").innerHTML = "04. Game Loop & Objects";
+			document.getElementById("5").innerHTML = "05. Spaceship Physics";
+			document.getElementById("6").innerHTML = "06. Screen Wrapping";
+			document.getElementById("7").innerHTML = "07. Shooting";
+			document.getElementById("8").innerHTML = "08. Asteroids";
+			document.getElementById("9").innerHTML = "09. Collision";
+			document.getElementById("10").innerHTML = "10. Title/Game/End Screens";
+
+			document.getElementById("canvas").innerHTML = "The Canvas";
+			document.getElementById("textCanvas").innerHTML = `Everything rendered in the game is done using the HTML5 Canvas. Canvases can be drawn to and cleared with JavaScript. You can create a canvas using the <b>canvas</b> HTML tag as shown below:`;
+			document.getElementById("textCanvas2").innerHTML = `The text inside the tag is shown if the client's browser is outdated and does not support the canvas. The <b>width</b> and <b>height</b> attributes specify the dimensions of the canvas in pixels. Notice that there is a distinction between these values and the CSS width and height of the canvas. In this example, the dimensions are set to 0x0 because they will be changed later with JS.`;
+			document.getElementById("textCanvas3").innerHTML = `To interact with the canvas in JS, we must reference it with <b>document.getElementById()</b>. To draw to it, we must get the 2D context of the canvas.`;
+			document.getElementById("textCanvas4").innerHTML = `The context of the canvas is obtained with <b>cv.getContext("2d", {alpha: false})</b>. Passing <b>{alpha: false}</b> removes the transparent background of the canvas to improve performance. It is optional. I named the context variable <b>c</b> so it can be typed easily, because we will be using it to draw to the canvas often.`;
+
+			document.getElementById("drawing").innerHTML = "Drawing";
+			document.getElementById("textDrawing1").innerHTML = `Drawing to the canvas is done using the 2D context we obtained earlier. Image files can be drawn by passing an <b>Image</b> variable along with the <b>x</b> and <b>y</b> coordinates to draw to. Example:`;
+			document.getElementById("textDrawing2").innerHTML = `This will draw an image to the top left corner of the canvas (position 0,0). If you run this code unaltered, however, you likely won't see anything appear, because you must wait for images to load before drawing them. This can be done by setting the <b>onload</b> value of the image to a function that checks if all images you plan on using have loaded. This is how images are loaded in the game:`;
+			document.getElementById("textDrawing3").innerHTML = `This code waits for all images to load, then calls <b>gmTitle()</b> which starts the game. Feel free to optimize this code if you plan on reusing it. I haven't optimized the code in this case because it has little impact on performance. What does have impact on performance, however, is drawing the images themselves.`;
+			document.getElementById("textDrawing4").innerHTML = `To draw a rotated image (which is done with the spaceship), you must translate and rotate the canvas context before calling <b>drawImage</b>. In the game, this is done with this function:`;
+			document.getElementById("textDrawing5").innerHTML = `<b>c.save()</b> saves the current state of the canvas context. Then, the context is translated by the x and y coordinates of the ship, and rotated. The x and y coordinates used in <b>drawImage</b> are relative to the x and y coordinates we translated the context by. In this case, the negatives of the half of the width and height of the ship are passed to position the ship in the center of the x and y coordinates we are drawing to. Finally, <b>c.restore()</b> is called, which undoes all of the translations and rotations, so that next time we draw something, it isn't translated and rotated somewhere random.`;
+			document.getElementById("textDrawing6").innerHTML = `To avoid rotated image bluriness, as done in the game, the canvas context variable <b>imageSmoothingEnabled</b> must be set to <b>false</b>.`;
+
+			document.getElementById("input").innerHTML = "Keyboard Input";
+			document.getElementById("inputText1").innerHTML = `To detect keyboard input, two event listeners are added to the document that check for key presses and releases. These are added with the <b>document</b> function <b>addEventListener</b> which takes two parameters. These include a string specifying the type of event to listen for, in this case <b>"keydown"</b> or <b>"keyup"</b>, and a function to call when the event is activated, which an event object is automatically passed to.`
+			document.getElementById("inputText2").innerHTML = `
+The <b>keyCode</b> variable of the event object contains an integer that represents the ID of the key being pressed or released. A switch statement is used to check which key code corresponds to which key variable. They key variables are set to 1 when activated in the <b>keydown</b> event and 0 in the <b>keyup</b> event.
+`
+			document.getElementById("inputText3").innerHTML = `To find the key code of a desired key, you can find a table online containing all key codes, or if you prefer to not visit any other sites, write a function yourself that prints the key code of the last pressed key.`
+			document.getElementById("inputText4").innerHTML = `
+Key codes <b>37</b> through <b>40</b> represent the arrow keys. When they are activated in the <b>keydown</b> event, the function <b>preventDefault</b> of the event object is called to prevent the default action of these keys, which scroll around the page. Without calling this function, the player would unintentionally scroll around the webpage when trying to play, which makes games nearly unplayable.
+`
+			document.getElementById("inputText5").innerHTML = `
+With these two <b>keydown</b> and <b>keyup</b> events we can now detect when keys are held down, but not when they are initially pressed. To implement key press detection, the function <b>stopKeyRepeat</b> is used, which simply sets the keys we only want to detect initial presses on to <b>0</b>.
+`
+			document.getElementById("inputText6").innerHTML = `
+This function is called every game loop after objects are done updating. When the keys it affects are pressed and set to <b>1</b>, the game objects will run their update function once before the key is set back to <b>0</b>, only activated upon another initial press of the key. The game loop is a function that evaluates every game frame, and it will be explained in the next section.
+`
+
+			document.getElementById("objects").innerHTML = "Game Loop & Objects";
+			document.getElementById("objectsText1").innerHTML = `
+In the game, the game loop is contained in the function <b>gmLoop</b>. This function executes a single frame of the game, and then calls the function <b>requestAnimationFrame</b> to call itself again in 1/60 of a second, resulting in game frames being drawn at 60 frames per second.
+`
+			document.getElementById("objectsText1").innerHTML = `
+In the game, the game loop is contained in the function <b>gmLoop</b>. This function executes a single frame of the game, and then calls the function <b>requestAnimationFrame</b> to call itself again in 1/60 of a second, resulting in game frames being drawn at 60 frames per second.
+`
+			document.getElementById("objectsText2").innerHTML = `
+To render a frame, the <b>gmLoop</b> function clears the canvas, draws the background, executes the update function of all objects that may draw themselves, and finally executes more code that isn't tied to any object, including the spawning of asteroids and drawing of the current score.
+`
+			document.getElementById("objectsText3").innerHTML = `
+Object instances are kept in the <b>inst</b> array. To update them, the <b>inst</b> array is looped through, and the update function of each instance, <b>ud</b>, is executed. The update functions contain the code executed by each instance every frame. These usually include moving the instance, checking for collisions, and drawing the instance.
+`
+			document.getElementById("objectsText4").innerHTML = `
+New object instances are created using the function <b>makeInst</b> as a constructor. You can see this in action in the code example above, where asteroids are spawned with this line:
+`
+			document.getElementById("objectsText5").innerHTML = `
+The third argument of <b>makeInst</b> is the ID of the object type being created. 0 is used for the creation of the player's ship, 1 is used for bullets, 2 is used for asteroids, and so forth. 3 is passed to this <b>makeInst</b> in this example because it creates the alert objects that flash for a few seconds before spawning an asteroid.
+`
+			document.getElementById("objectsText6").innerHTML = `
+Let's take a deeper look into the code of <b>makeInst</b>.
+`
+			document.getElementById("objectsText7").innerHTML = `
+Object instances are added to the <b>inst</b> array as soon as the <b>makeInst</b> function is called. If there is no room left in the array for new instances, the instance being created will overwrite another instance as long as the instance's <b>ps</b> variable, which indicates persistence, is not set to <b>true</b>. The object-specific variables and update function are determined by the switch statement.
+`
+			document.getElementById("objectsText8").innerHTML = `Sometimes different objects execute the same sets of code, such as collision checking and screen wrapping. These are stored in functions so that they don't have to be written over and over again for each object. For an object instance to call these functions properly, a reference to one of them must be stored in an instance variable, and then called from that reference. This is demonstrated in the following code:`
+			document.getElementById("objectsText9").innerHTML = `
+Calling the function without a reference causes the keyword <b>this</b> to not reference the object instance. It is valid to call functions without a reference that do not need to reference the instance calling the object, such as <b>gmEnd</b>, which simply ends the game without accessing any instance variables, though this is rarely done. 
+`
+			document.getElementById("objectsText10").innerHTML = `
+To summarize, <b>gameLoop</b> is called 60 times a second to draw a new game frame and update object instances by calling their <b>ud</b> function. 
+`
+
+			document.getElementById("physics").innerHTML = "Spaceship Physics";
+			document.getElementById("physicsText1").innerHTML = `
+The spaceship object keeps track of the direction it points in with its <b>dir</b> variable, and keeps track of its momentum in two arrays, <b>xforces</b> and <b>yforces</b>, both of equal length. When the up key is held, the object adds the amount of pixels it should move horizontally and vertically in <b>xforces</b> and <b>yforces</b> respectively, this is calculated with sine and cosine waves with the direction of the ship as input.
+`
+			document.getElementById("physicsText2").innerHTML = `The more the direction is turned to 0 or pi radians, the more the ship will move horizontally, and the more the direction is turned to pi`
+			document.getElementById("physicsText3").innerHTML = `
+Indexes of the <b>xforces</b> and <b>yforces</b> arrays are accessed with the variable <b>force</b>. Each time forces are added, <b>force</b> increments to move to the next index, and loops back to 0 when the end of the arrays, stored in <b>PLAYER_FORCE_COUNT</b>, are reached.
+`
+			document.getElementById("physicsText4").innerHTML = `The forces are finally applied to the ship and move it in the loop below, which is executed regardless of whether or not the up key is held down.`
+			document.getElementById("physicsText5").innerHTML = `In the end, this creates a system where forces applied in past frames still move the ship until the ship either moves for long enough that the forces are overwritten, or the ship moves in the opposite direction to balance the force. This is why the ship "drifts" ingame instead of staying still or immediately changing the direction of movement once any amount of force is added.`
+
+			document.getElementById("wrapping").innerHTML = "Screen Wrapping";
+			document.getElementById("wrappingText1").innerHTML = `To keep the player and asteroids within the bounds of the screen, the x and y values of the objects are reset once they reach the edge of the screen.`
+			document.getElementById("wrappingText2").innerHTML = `When the x and y values are reset, they are positioned relative to how far the object has move past the bounds of the screen. For example, if the screen with is 600 pixels and the object's x position is at 650, the x value will be reset to 0 plus 50 because it traveled 50 pixels beyond the screen. This results in no loss of movement when wrapping around the screen.`
+			document.getElementById("wrappingText3").innerHTML = `The code above properly handles the coordinates of objects, but we still need to draw objects while they are wrapping from one side of the screen to the next to make wrapping entirely seamless. This is accomplished by drawing the objects in all 8 directions around them with the following code:`
+			document.getElementById("wrappingText4").innerHTML = `Each object is spaced horizontally by the screen width, and spaced vertically by the screen height. This effect causes objects to appear on top of the screen when wrapping from the bottom, on the left of the screen when wrapping from the right, and so forth.`
+			document.getElementById("wrappingText5").innerHTML = `This draws a total of 9 images, so it should be used sparingly, as drawing is a computationally expensive operation. It also has room for optimization, as it can be edited to only draw objects based on the direction they are moving in.`
+
+			document.getElementById("shooting").innerHTML = "Shooting";
+			document.getElementById("shootingText1").innerHTML = `
+This section covers the mechanics of bullet firing by the spaceship object that the player controls. Bullets, like the spaceship itself, are objects created with <b>makeInst</b> that have speeds initialized upon their creation which go unchanged until the object is destroyed. The following function is used by spaceship instances to create them.
+`
+			document.getElementById("shootingText2").innerHTML = `
+Bullets use two variables to move each frame, <b>hsp</b> and <b>vsp</b> which control the bullets' horizontal speed and vertical speed respectively. These are used instead of a direction and speed variable to control bullet movement because they only need to be calculated once, while direction calculations must be performed every frame to move a bullet. This improves performance, especially when many bullets objects are in action at once.
+`
+			document.getElementById("shootingText3").innerHTML = `
+The rate at which bullets are fired are dependent on two variables in the spaceship object, <b>shootCooldown</b> and <b>shootCooldownReset</b>. <b>shootCooldown</b> is decremented each frame in the spaceship's <b>ud</b> function until it reaches <b>0</b>. When the Z key is pressed or held at this point, a bullet will be fired, and <b>shootCooldown</b> will be set to <b>shootCooldownReset</b>. The player must wait until <b>shootCooldown</b> reaches <b>0</b> to fire another bullet, or let go of the Z key to immediately set the cooldown to <b>0</b>. Below is the code that the spaceship runs to perform all of this:
+`
+
+			document.getElementById("asteroids").innerHTML = "Asteroids";
+			document.getElementById("asteroidsText1").innerHTML = `
+Asteroids are spawned by alert objects, which are spawned by an if statement found in <b>gmLoop</b> shown below. The spawning is influenced by three global variables: <b>spawning</b>, <b>spawnTime</b>, and <b>spawnTimeReset</b>. 
+`
+			document.getElementById("asteroidsText2").innerHTML = `
+<b>spawning</b> is a boolean that controls whether or not asteroids can spawn.
+`
+			document.getElementById("asteroidsText3").innerHTML = `
+<b>spawnTime</b> is an integer that decrements each frame until it reaches <b>0</b>, at which point an alert object will spawn.
+`
+			document.getElementById("asteroidsText4").innerHTML = `
+<b>spawnTimeReset</b> is the value that <b>spawnTime</b> is reset to upon reaching <b>0</b>, and it decreases by <b>SPAWN_TIME_DEC</b> each time an alert object is created. This shortens the amount of time between alert spawns until <b>spawnTimeReset</b> reaches the minimum spawn time, <b>SPAWN_TIME_MIN</b>.
+`
+			document.getElementById("asteroidsText5").innerHTML = `Alert objects draw a blinking exclamation mark symbol onto the screen before spawning an asteroid. This is done to give the player time to react before each asteroid spawns. Their update function, shown below, is very simple:`
+			document.getElementById("asteroidsText6").innerHTML = `
+Asteroids are also very simple. They wrap around the screen with the same functions as spaceships, and move similarly to bullets with <b>hsp</b> and <b>vsp</b> values, however, these variables are initialized in <b>makeInst</b> rather than being set by another instance, i.e., spaceship instances setting bullet speeds. Here is their update function:
+`
+			document.getElementById("asteroidsText7").innerHTML = `The only complex piece of code is the collision checking for bullets, which will be explained in the next section.`
+
+			document.getElementById("collision").innerHTML = "Collision";
+			document.getElementById("collisionText1").innerHTML = `
+Collision between object instances is done with the function <b>checkRect</b>, which checks for a collision between two rectangles. It takes 8 parameters: the x, y, width, and height of two different rectangles, and returns a boolean. The only precondition is that the variables for the smaller rectangle is passed first.
+`
+			document.getElementById("collisionText2").innerHTML = `
+This function is used by another two functions: <b>oCollideWithSmaller</b> and <b>oCollideWithLarger</b>. These functions are called by object instances to check for collisions between all instances of another type of object. This is done by looping through <b>inst</b> to find all instances of the object type and calling <b>checkRect</b> with their variables. If a collision is found, the instance collided with is returned, otherwise <b>null</b> is returned. Here is <b>oCollideWithSmaller</b>:
+`
+			document.getElementById("collisionText3").innerHTML = `
+The function <b>oCollideWithLarger</b> is identical to <b>oCollideWithSmaller</b> except the order of rectangles passed to <b>checkRect</b> is reversed. This is because the functionality of <b>checkRect</b> depends on the smaller rectangle being passed first. The two "collide with" functions exist to check for collisions with objects that are smaller than the calling instance or larger.
+`
+			document.getElementById("collisionText4").innerHTML = `The reason two "collide with" functions exist despite much of their code being the same is to improve performance. If there was only one "collide with" function that required an extra if statement to determine which set of objects was smaller, performance would suffer, because that if statement would be run for every single instance of the object type being searched for.`
+
+			document.getElementById("screens").innerHTML = "Title/Game/End Screens";
+			document.getElementById("screensText1").innerHTML = `This section covers the code behind the multiple "screens" of the game, those being the title screen, gameplay screen, and game over screen.`
+			document.getElementById("screensText2").innerHTML = `
+The title screen is run by calling the function <b>gmTitle</b>. This simply creates a title screen object and starts the game loop.
+`
+			document.getElementById("screensText3").innerHTML = `
+The update function of the title object draws the title text and starts the game when enter is pressed by calling <b>gmStart</b>.
+`
+			document.getElementById("screensText4").innerHTML = `
+The function <b>gmStart</b> destroys all object instances by filling <b>inst</b> with null values, starts the spawning of asteroids, sets the score to <b>0</b>, and creates a spaceship object.
+`
+			document.getElementById("screensText5").innerHTML = `
+The final screen changing function is <b>gmEnd</b>. This destroys all object instances, records the high score, stops the spawning of asteroids, and creates a game over screen object.
+`
+			document.getElementById("screensText6").innerHTML = `
+The game over screen object draws the game over text and restarts the game by calling <b>gmStart</b>, just as the title screen object does.
+`
+			document.getElementById("end").innerHTML = "You've reached the end of this tutorial-ish thing! Hopefully you learned something!"
+			document.getElementById("returnGame").innerHTML = "Go back to the game"
+			document.getElementById("vim").innerHTML = "Vim good Linux good Firefox somewhat good"
+		}
+	}
+</script>
+</body>
 </html>

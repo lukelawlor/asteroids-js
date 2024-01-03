@@ -602,9 +602,20 @@ function changeLanguage(language) {
 		document.getElementById('instructions').innerHTML = "Gauche et Droite pour Tourner, Haut et Bas pour Bouger, Z pour Tirer";
 		document.getElementById('learnHow').innerHTML = "Apprenez comment cela fonctionne !";
 		document.getElementById('developedWith').innerHTML = "développé avec Vim sous Linux, testé sur Firefox (la bonne façon)";
+		document.getElementById('translation').innerHTML = "Traduction :";
 
+		document.getElementById("titleHowGameWork").innerHTML = "Comment le jeu fonctionne";
+		document.getElementById("1").innerHTML = "Le Canvas";
+		document.getElementById("2").innerHTML = "Le Canvas";
+		document.getElementById("2").innerHTML = "Le Canvas";
+		document.getElementById("2").innerHTML = "Le Canvas";
+		document.getElementById("2").innerHTML = "Le Canvas";
+		document.getElementById("2").innerHTML = "Le Canvas";
+		document.getElementById("2").innerHTML = "Le Canvas";
+		document.getElementById("2").innerHTML = "Le Canvas";
+		document.getElementById("2").innerHTML = "Le Canvas";
+		document.getElementById("2").innerHTML = "Le Canvas";
 
-		document.getElementById('titleHowGameWork').innerHTML = "développé avec Vim sous Linux, testé sur Firefox (la bonne façon)";
 
 	} else if (language === 'en') {
 		IS_FR = false;
@@ -616,6 +627,10 @@ function changeLanguage(language) {
 		document.getElementById('instructions').innerHTML = "Left and Right to Turn, Up and Down to Move, Z to Shoot";
 		document.getElementById('learnHow').innerHTML = "Learn how this works!";
 		document.getElementById('developedWith').innerHTML = "developed with Vim under Linux, tested on Firefox (the right way)";
+		document.getElementById('translation').innerHTML = "Translation :";
+
+		document.getElementById("titleHowGameWork").innerHTML = "How The Game Works";
+
 	}
 }
 
