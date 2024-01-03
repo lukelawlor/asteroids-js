@@ -1,61 +1,29 @@
-// Constants
-const GAME_WIDTH = 800;
-const GAME_HEIGHT = 600;
-const GAME_WIDTH_HALF = GAME_WIDTH / 2;
-const GAME_HEIGHT_HALF = GAME_HEIGHT / 2;
+// Enums
+import { GAME } from '/src/enums/game.enum.js';
+import { PLAYER } from '/src/enums/player.enum.js';
+import { ALERT } from '/src/enums/alert.enum.js';
+import { SPAWN } from '/src/enums/spawn.enum.js';
+import { TEXT_COLOR } from '/src/enums/textColor.enum.js';
+import { INSTANCES } from '/src/enums/instances.enum.js';
 
-const MAX_INSTANCES = 500;
-
-const PLAYER_FORCE_COUNT = 80;
-const PLAYER_SPEED_FORCE = 0.06;
-const PLAYER_SPEED_TURN = 0.06;
-const PLAYER_SPEED_BULLET = 10;
-
-const ALERT_FRAMES = 8;
-const ALERT_DURATION = 110;
-
-const SPAWN_TIME_START = 240;
-const SPAWN_TIME_DEC = 10;
-const SPAWN_TIME_MIN = 50;
-
-const TEXT_COLOR_WHITE = "#ffffff";
-const TEXT_COLOR_GREEN = "#88ff88";
+// Services
+import { setupCanva } from './src/services/canva.service';
+import { initGameVariables } from './src/services/game.service';
+import { initInstancesParams, killInst } from './src/services/instances.service';
+import { initImages } from './src/services/image.service';
+import { initFramerateParams, updateFramerate } from './src/services/framerate.service';
 
 // Canvases
-var cv = document.getElementById("can");
-cv.width = GAME_WIDTH;
-cv.height = GAME_HEIGHT;
-var c = cv.getContext("2d", { alpha: false });
-c.imageSmoothingEnabled = false;
-c.fillStyle = "#ffffff";
+let { cv, c } = setupCanva(document);
 
 // Global Game Variables
-var spawning = false;
-var spawnTimeReset = SPAWN_TIME_START;
-var spawnTime = spawnTimeReset;
-var score = 0;
-var highScore = 0;
-var bxt1 = 0;
-var byt1 = 0;
-var bxt2 = 0;
-var byt2 = 0;
+let { spawning, spawnTimeReset, spawnTime, score, highScore, bxt1, bxt2, byt1, byt2 } = initGameVariables();
 
 // Instances
-var inst = new Array(MAX_INSTANCES);
-var instNext = 0;
+let { inst, instNext } = initInstancesParams();
 
 // [I] Images
-var sSpaceship = new Image(); sSpaceship.src = "/images/ship.png";
-var sBullet = new Image(); sBullet.src = "/images/bullet.png";
-var sAsteroid = new Image(); sAsteroid.src = "/images/asteroid.png";
-var sAlert1 = new Image(); sAlert1.src = "/images/alert1.png";
-var sAlert2 = new Image(); sAlert2.src = "/images/alert2.png";
-var sBg1 = new Image(); sBg1.src = "/images/bg1.png";
-var sBg2 = new Image(); sBg2.src = "/images/bg2.png";
-
-var imagesLoaded = 0;
-var imagesNeeded = 7;
-var imagesToLoad = [sSpaceship, sBullet, sAsteroid, sAlert1, sAlert2, sBg1, sBg2];
+let { sSpaceship, sBullet, sAsteroid, sAlert1, sAlert2, sBg1, sBg2, imagesLoaded, imagesNeeded, imagesToLoad } = initImages();
 
 function imageLoaded() {
 	if ((++imagesLoaded) >= imagesNeeded)
@@ -97,21 +65,15 @@ function stopKeyRepeat() {
 }
 
 // Framerate
-var frameLast = Date.now();
-var frameNow = frameLast;
-var fps = 0;
+let { frameLast, frameNow, fps } = initFramerateParams();
 
-function updateFramerate() {
-	frameNow = Date.now();
-	fps = Math.round(1000 / (frameNow - frameLast));
-	frameLast = frameNow;
-}
+updateFramerate(frameNow, fps, frameLast);
 
 // Game Objects
 function makeInst(x, y, o) {
 	// Skip past instance indexes that are full or have persistent objects
 	while (inst[instNext] != null && inst[instNext].ps != null) {
-		if ((++instNext) >= MAX_INSTANCES)
+		if ((++instNext) >= INSTANCES.MAX)
 			instNext = 0;
 	}
 
@@ -119,7 +81,7 @@ function makeInst(x, y, o) {
 	inst[instNext] = this;
 	this.id = instNext;
 
-	if ((++instNext) >= MAX_INSTANCES)
+	if ((++instNext) >= INSTANCES.MAX)
 		instNext = 0;
 
 	// Set x & y position
@@ -132,12 +94,12 @@ function makeInst(x, y, o) {
 	switch (o) {
 		case 0:
 			{
-				this.xforces = new Array(PLAYER_FORCE_COUNT).fill(0);
-				this.yforces = new Array(PLAYER_FORCE_COUNT).fill(0);
+				this.xforces = new Array(PLAYER.FORCE_COUNT).fill(0);
+				this.yforces = new Array(PLAYER.FORCE_COUNT).fill(0);
 				this.force = 0;
-				this.forceSpeed = PLAYER_SPEED_FORCE;
-				this.turnSpeed = PLAYER_SPEED_TURN;
-				this.bulletSpeed = PLAYER_SPEED_BULLET;
+				this.forceSpeed = PLAYER.SPEED_FORCE;
+				this.turnSpeed = PLAYER.SPEED_TURN;
+				this.bulletSpeed = PLAYER.SPEED_BULLET;
 				this.shootCooldownReset = 10;
 				this.shootCooldown = 0;
 				this.dir = 0;
@@ -184,8 +146,8 @@ function makeInst(x, y, o) {
 		case 3:
 			{
 				this.frame1 = true;
-				this.frames = ALERT_FRAMES;
-				this.dur = ALERT_DURATION;
+				this.frames = ALERT.FRAMES;
+				this.dur = ALERT.DURATION;
 
 				this.ud = oAlertUD;
 				break;
@@ -202,15 +164,12 @@ function makeInst(x, y, o) {
 			}
 	}
 }
-function killInst(o) {
-	inst[o.id] = null;
-}
 
 // [O] Objects
 function oSpaceshipUD() {
 	// Checking if hit by something
 	if (this.hit(2, this.x - 10, this.y - 10, 20, 20, -20, -20, 40, 40) != null) {
-		killInst(this);
+		killInst(inst, this);
 		gmEnd();
 	}
 
@@ -223,7 +182,7 @@ function oSpaceshipUD() {
 		this.yforces[this.force] = Math.sin(this.dir) * this.forceSpeed;
 
 		++this.force;
-		if (this.force >= PLAYER_FORCE_COUNT)
+		if (this.force >= PLAYER.FORCE_COUNT)
 			this.force = 0;
 	}
 	if (kd) {
@@ -231,12 +190,12 @@ function oSpaceshipUD() {
 		this.yforces[this.force] = -Math.sin(this.dir) * this.forceSpeed;
 
 		++this.force;
-		if (this.force >= PLAYER_FORCE_COUNT)
+		if (this.force >= PLAYER.FORCE_COUNT)
 			this.force = 0;
 	}
 
 	// Apply movement	
-	for (var i = 0; i < PLAYER_FORCE_COUNT; ++i) {
+	for (var i = 0; i < PLAYER.FORCE_COUNT; ++i) {
 		this.x += this.xforces[i];
 		this.y += this.yforces[i];
 	}
@@ -290,9 +249,9 @@ function oAsteroidUD() {
 	if ((hitby = this.hit(1, this.x - this.halfWidth, this.y - this.halfHeight, 64, 64, 0, 0, 10, 10)) != null) {
 		if ((--this.hp) == 0) {
 			++score;
-			killInst(this);
+			killInst(inst, this);
 		}
-		killInst(hitby);
+		killInst(inst, hitby);
 	}
 
 	// Draw
@@ -306,12 +265,12 @@ function oAlertUD() {
 	if ((--this.dur) == 0) {
 		// Spawn an asteroid, then delete self
 		new makeInst(this.x, this.y, 2);
-		killInst(this);
+		killInst(inst, this);
 	}
 
 	// Animation
 	if ((--this.frames) == 0) {
-		this.frames = ALERT_FRAMES;
+		this.frames = ALERT.FRAMES;
 		this.frame1 = !this.frame1;
 	}
 
@@ -321,13 +280,13 @@ function oAlertUD() {
 function oTitleUD() {
 	c.textAlign = "center";
 	c.font = "20px Courier";
-	c.fillStyle = TEXT_COLOR_GREEN;
-	c.fillText("the game finished loading. yay.", GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 120);
-	c.fillStyle = TEXT_COLOR_WHITE;
-	c.fillText("Bad Asteroid Game", GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 60);
-	c.fillStyle = TEXT_COLOR_GREEN;
-	c.fillText("by Luke Lawlor", GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 30);
-	c.fillText("Press Enter to Play", GAME_WIDTH_HALF, GAME_HEIGHT_HALF + 20);
+	c.fillStyle = TEXT_COLOR.GREEN;
+	c.fillText("the game finished loading. yay.", GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 120);
+	c.fillStyle = TEXT_COLOR.WHITE;
+	c.fillText("Bad Asteroid Game", GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 60);
+	c.fillStyle = TEXT_COLOR.GREEN;
+	c.fillText("by Luke Lawlor", GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 30);
+	c.fillText("Press Enter to Play", GAME.WIDTH_HALF, GAME.HEIGHT_HALF + 20);
 
 	if (k2)
 		gmStart();
@@ -335,12 +294,12 @@ function oTitleUD() {
 function oEndUD() {
 	c.textAlign = "center";
 	c.font = "20px Courier";
-	c.fillStyle = TEXT_COLOR_WHITE;
-	c.fillText("G A M E   O V E R", GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 60);
-	c.fillStyle = TEXT_COLOR_GREEN;
-	c.fillText("Score: " + score, GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 30);
-	c.fillText("High Score: " + highScore, GAME_WIDTH_HALF, GAME_HEIGHT_HALF - 12);
-	c.fillText("Press Enter to Replay", GAME_WIDTH_HALF, GAME_HEIGHT_HALF + 20);
+	c.fillStyle = TEXT_COLOR.WHITE;
+	c.fillText("G A M E   O V E R", GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 60);
+	c.fillStyle = TEXT_COLOR.GREEN;
+	c.fillText("Score: " + score, GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 30);
+	c.fillText("High Score: " + highScore, GAME.WIDTH_HALF, GAME.HEIGHT_HALF - 12);
+	c.fillText("Press Enter to Replay", GAME.WIDTH_HALF, GAME.HEIGHT_HALF + 20);
 
 	if (k2)
 		gmStart();
@@ -348,25 +307,25 @@ function oEndUD() {
 
 // General Object Functions
 function oWorldWrap() {
-	if (this.x > GAME_WIDTH)
-		this.x = GAME_WIDTH - this.x;
+	if (this.x > GAME.WIDTH)
+		this.x = GAME.WIDTH - this.x;
 	else if (this.x < 0)
-		this.x = GAME_WIDTH + this.x;
+		this.x = GAME.WIDTH + this.x;
 
-	if (this.y > GAME_HEIGHT)
-		this.y = GAME_HEIGHT - this.y;
+	if (this.y > GAME.HEIGHT)
+		this.y = GAME.HEIGHT - this.y;
 	else if (this.y < 0)
-		this.y = GAME_HEIGHT + this.y;
+		this.y = GAME.HEIGHT + this.y;
 }
 
 // Draw an object normally, and as it wraps across the screen
 // Precondition: object has a draw() function
 function oDrawWrap() {
-	var xstop = this.x + GAME_WIDTH;
-	var ystop = this.y + GAME_HEIGHT;
+	var xstop = this.x + GAME.WIDTH;
+	var ystop = this.y + GAME.HEIGHT;
 
-	for (var x = this.x - GAME_WIDTH - 1; x <= xstop; x += GAME_WIDTH) {
-		for (var y = this.y - GAME_HEIGHT - 1; y <= ystop; y += GAME_HEIGHT) {
+	for (var x = this.x - GAME.WIDTH - 1; x <= xstop; x += GAME.WIDTH) {
+		for (var y = this.y - GAME.HEIGHT - 1; y <= ystop; y += GAME.HEIGHT) {
 			this.draw(x, y);
 		}
 	}
@@ -374,7 +333,7 @@ function oDrawWrap() {
 
 function oCollideWithLarger(o, x1, y1, w1, h1, s1, s2, w2, h2) {
 	var other;
-	for (var i = 0; i < MAX_INSTANCES; ++i) {
+	for (var i = 0; i < INSTANCES.MAX; ++i) {
 		other = inst[i];
 		if (other != null && other.o == o) {
 			if (checkRect(x1, y1, w1, h1, other.x + s1, other.y + s2, w2, h2))
@@ -386,7 +345,7 @@ function oCollideWithLarger(o, x1, y1, w1, h1, s1, s2, w2, h2) {
 
 function oCollideWithSmaller(o, x1, y1, w1, h1, s1, s2, w2, h2) {
 	var other;
-	for (var i = 0; i < MAX_INSTANCES; ++i) {
+	for (var i = 0; i < INSTANCES.MAX; ++i) {
 		other = inst[i];
 		if (other != null && other.o == o) {
 			if (checkRect(other.x + s1, other.y + s2, w2, h2, x1, y1, w1, h1))
@@ -449,14 +408,14 @@ function drawBg() {
 		byt2 = 0;
 
 	// Draw
-	for (var x = -bw2 + bxt2; x < GAME_WIDTH + bw2; x += bw2) {
-		for (var y = -bh2 + byt2; y < GAME_HEIGHT + bh2; y += bh2) {
+	for (var x = -bw2 + bxt2; x < GAME.WIDTH + bw2; x += bw2) {
+		for (var y = -bh2 + byt2; y < GAME.HEIGHT + bh2; y += bh2) {
 			c.drawImage(sBg2, x, y);
 		}
 	}
 
-	for (var x = -bw1 + bxt1; x < GAME_WIDTH + bw1; x += bw1) {
-		for (var y = -bh1 + byt1; y < GAME_HEIGHT + bh1; y += bh1) {
+	for (var x = -bw1 + bxt1; x < GAME.WIDTH + bw1; x += bw1) {
+		for (var y = -bh1 + byt1; y < GAME.HEIGHT + bh1; y += bh1) {
 			c.drawImage(sBg1, x, y);
 		}
 	}
@@ -472,7 +431,7 @@ function gmTitle() {
 function gmStart() {
 	inst.fill(null);
 	spawning = true;
-	spawnTimeReset = SPAWN_TIME_START;
+	spawnTimeReset = SPAWN.TIME_START;
 	spawnTime = 10;
 	score = 0;
 	new makeInst(100, 80, 0);
@@ -498,21 +457,21 @@ function gmLoop() {
 	drawBg();
 
 	// Update Instances
-	for (var i = 0; i < MAX_INSTANCES; ++i)
+	for (var i = 0; i < INSTANCES.MAX; ++i)
 		if (inst[i] != null)
 			inst[i].ud();
 
 	// Spawn Asteroids
 	if (spawning && (--spawnTime) <= 0) {
 		// Spawn Asteroid
-		var x = Math.random() * GAME_WIDTH;
-		var y = Math.random() * GAME_HEIGHT;
+		var x = Math.random() * GAME.WIDTH;
+		var y = Math.random() * GAME.HEIGHT;
 		new makeInst(x, y, 3);
 
 		// Reset Spawn Time
-		spawnTimeReset -= SPAWN_TIME_DEC;
-		if (spawnTimeReset < SPAWN_TIME_MIN)
-			spawnTimeReset = SPAWN_TIME_MIN;
+		spawnTimeReset -= SPAWN.TIME_DEC;
+		if (spawnTimeReset < SPAWN.TIME_MIN)
+			spawnTimeReset = SPAWN.TIME_MIN;
 		spawnTime = spawnTimeReset;
 	}
 
@@ -522,7 +481,7 @@ function gmLoop() {
 	// Show Framerate & Score
 	updateFramerate();
 
-	c.fillStyle = TEXT_COLOR_GREEN;
+	c.fillStyle = TEXT_COLOR.GREEN;
 	c.font = "16px Courier";
 	c.textAlign = "left";
 	c.fillText("FPS: " + fps, 6, 16);
