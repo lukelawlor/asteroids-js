@@ -12,6 +12,10 @@ import { initGameVariables } from './src/services/game.service';
 import { initInstancesParams, killInst } from './src/services/instances.service';
 import { initImages } from './src/services/image.service';
 import { initFramerateParams, updateFramerate } from './src/services/framerate.service';
+import { initStateOfKey } from './src/services/keyboard.service';
+import { oCollideWithLarger, oCollideWithSmaller } from './src/services/collider.service';
+import { drawBg } from './src/services/background.service';
+import { oDrawWrap, oWorldWrap } from './src/services/object.service';
 
 // Canvases
 let { cv, c } = setupCanva(document);
@@ -35,65 +39,65 @@ for (var i = 0; i < imagesToLoad.length; ++i) {
 }
 
 // Keyboard Input
-var kl = 0, kr = 0, ku = 0, kd = 0, k1 = 0, k2 = 0;
+let { kl, kr, ku, kd, k1, k2 } = initStateOfKey();
 
-// Listen for keyboard input
+// Events
 document.addEventListener("keydown", function (e) {
-    switch (e.key) {
-        case 'ArrowLeft':
-        case 'q':
-            kl = 1;
-            e.preventDefault();
-            break;
-        case 'ArrowRight':
-        case 'd':
-            kr = 1;
-            e.preventDefault();
-            break;
-        case 'ArrowDown':
-        case 's':
-            kd = 1;
-            e.preventDefault();
-            break;
-        case 'ArrowUp':
-        case 'z':
-            ku = 1;
-            e.preventDefault();
-            break;
-        case ' ':
-            k1 = 1;
-            e.preventDefault();
-            break;
-        case 'Enter':
-            k2 = 1;
-            break;
+	switch (e.key) {
+		case 'ArrowLeft':
+		case 'q':
+			kl = 1;
+			e.preventDefault();
+			break;
+		case 'ArrowRight':
+		case 'd':
+			kr = 1;
+			e.preventDefault();
+			break;
+		case 'ArrowDown':
+		case 's':
+			kd = 1;
+			e.preventDefault();
+			break;
+		case 'ArrowUp':
+		case 'z':
+			ku = 1;
+			e.preventDefault();
+			break;
+		case ' ':
+			k1 = 1;
+			e.preventDefault();
+			break;
+		case 'Enter':
+			k2 = 1;
+			break;
 		case 'Escape':
 			gmEnd();
-    }
+	}
 });
 document.addEventListener("keyup", function (e) {
-    switch (e.key) {
-        case 'ArrowLeft':
-        case 'q':
-            kl = 0;
-            break;
-        case 'ArrowRight':
-        case 'd':
-            kr = 0;
-            break;
-        case 'ArrowDown':
-        case 's':
-            kd = 0;
-            break;
-        case 'ArrowUp':
-        case 'z':
-            ku = 0;
-            break;
-        case ' ':
-            k1 = 0;
+	switch (e.key) {
+		case 'ArrowLeft':
+		case 'q':
+			kl = 0;
+			break;
+		case 'ArrowRight':
+		case 'd':
+			kr = 0;
+			break;
+		case 'ArrowDown':
+		case 's':
+			kd = 0;
+			break;
+		case 'ArrowUp':
+		case 'z':
+			ku = 0;
+			break;
+		case ' ':
+			k1 = 0;
 			e.preventDefault();
-            break;
-    }
+			break;
+	}
 });
 
 // Set keys that don't repeat when held 
@@ -256,11 +260,13 @@ function oSpaceshipUD() {
 	// Draw
 	this.drawWrap();
 }
+
 function oSpaceshipShoot() {
 	var bullet = new makeInst(this.x, this.y, 1);
 	bullet.hsp = Math.cos(this.dir) * this.bulletSpeed;
 	bullet.vsp = Math.sin(this.dir) * this.bulletSpeed;
 }
+
 function oSpaceshipDraw(x, y) {
 	c.save();
 	c.translate(x, y);
@@ -268,11 +274,13 @@ function oSpaceshipDraw(x, y) {
 	c.drawImage(sSpaceship, -this.w / 2, -this.h / 2);
 	c.restore();
 }
+
 function oBulletUD() {
 	this.x += this.hsp;
 	this.y += this.vsp;
 	c.drawImage(sBullet, this.x, this.y);
 }
+
 function oAsteroidUD() {
 	// Move
 	this.x += this.hsp;
@@ -294,6 +302,7 @@ function oAsteroidUD() {
 	// Draw
 	this.drawWrap();
 }
+
 function oAsteroidDraw(x, y) {
 	c.drawImage(sAsteroid, x - this.halfWidth, y - this.halfHeight);
 }
@@ -328,6 +337,7 @@ function oTitleUD() {
 	if (k2)
 		gmStart();
 }
+
 function oEndUD() {
 	c.textAlign = "center";
 	c.font = "20px Courier";
@@ -340,123 +350,6 @@ function oEndUD() {
 
 	if (k2)
 		gmStart();
-}
-
-// General Object Functions
-function oWorldWrap() {
-	if (this.x > GAME.WIDTH)
-		this.x = GAME.WIDTH - this.x;
-	else if (this.x < 0)
-		this.x = GAME.WIDTH + this.x;
-
-	if (this.y > GAME.HEIGHT)
-		this.y = GAME.HEIGHT - this.y;
-	else if (this.y < 0)
-		this.y = GAME.HEIGHT + this.y;
-}
-
-// Draw an object normally, and as it wraps across the screen
-// Precondition: object has a draw() function
-function oDrawWrap() {
-	var xstop = this.x + GAME.WIDTH;
-	var ystop = this.y + GAME.HEIGHT;
-
-	for (var x = this.x - GAME.WIDTH - 1; x <= xstop; x += GAME.WIDTH) {
-		for (var y = this.y - GAME.HEIGHT - 1; y <= ystop; y += GAME.HEIGHT) {
-			this.draw(x, y);
-		}
-	}
-}
-
-function oCollideWithLarger(o, x1, y1, w1, h1, s1, s2, w2, h2) {
-	var other;
-	for (var i = 0; i < INSTANCES.MAX; ++i) {
-		other = inst[i];
-		if (other != null && other.o == o) {
-			if (checkRect(x1, y1, w1, h1, other.x + s1, other.y + s2, w2, h2))
-				return other;
-		}
-	}
-	return null;
-}
-
-function oCollideWithSmaller(o, x1, y1, w1, h1, s1, s2, w2, h2) {
-	var other;
-	for (var i = 0; i < INSTANCES.MAX; ++i) {
-		other = inst[i];
-		if (other != null && other.o == o) {
-			if (checkRect(other.x + s1, other.y + s2, w2, h2, x1, y1, w1, h1))
-				return other;
-		}
-	}
-	return null;
-}
-
-// Check for a collision between two rectangles
-// Pass the variables for the smaller rectangle first
-function checkRect(x1, y1, w1, h1, x2, y2, w2, h2) {
-	var x12 = x1 + w1;
-	var y12 = y1 + h1;
-	var x22 = x2 + w2;
-	var y22 = y2 + h2;
-
-	if (x1 >= x2 && x1 <= x22) {
-		//Left Side Hit
-		if (y1 >= y2 && y1 <= y22) {
-			//Top Side Hit
-			return true;
-		}
-		if (y12 >= y2 && y12 <= y22) {
-			// Bottom Side Hit
-			return true;
-		}
-	}
-	else if (x12 >= x2 && x12 <= x22) {
-		// Right Side Hit
-		if (y1 >= y2 && y1 <= y22) {
-			//Top Side Hit
-			return true;
-		}
-		if (y12 >= y2 && y12 <= y22) {
-			// Bottom Side Hit
-			return true;
-		}
-	}
-	return false;
-}
-
-// Background
-function drawBg() {
-	// Vars
-	var bw1 = sBg1.width;
-	var bh1 = sBg1.height;
-	var bw2 = sBg1.width;
-	var bh2 = sBg1.height;
-
-	// Increase ticks
-	if ((bxt1 += 0.3) > bw1)
-		bxt1 = 0;
-	if ((byt1 += 0.1) > bh1)
-		byt1 = 0;
-
-	if ((bxt2 += 0.2) > bw2)
-		bxt2 = 0;
-	if ((byt2 += 0.05) > bh2)
-		byt2 = 0;
-
-	// Draw
-	for (var x = -bw2 + bxt2; x < GAME.WIDTH + bw2; x += bw2) {
-		for (var y = -bh2 + byt2; y < GAME.HEIGHT + bh2; y += bh2) {
-			c.drawImage(sBg2, x, y);
-		}
-	}
-
-	for (var x = -bw1 + bxt1; x < GAME.WIDTH + bw1; x += bw1) {
-		for (var y = -bh1 + byt1; y < GAME.HEIGHT + bh1; y += bh1) {
-			c.drawImage(sBg1, x, y);
-		}
-	}
-
 }
 
 // Game Functions
@@ -491,7 +384,7 @@ function gmLoop() {
 	c.clearRect(0, 0, cv.width, cv.height);
 
 	// Draw Background
-	drawBg();
+	drawBg(c, sBg1, sBg2, bxt1, byt1, bxt2, byt2);
 
 	// Update Instances
 	for (var i = 0; i < INSTANCES.MAX; ++i)
@@ -524,4 +417,21 @@ function gmLoop() {
 	c.fillText("FPS: " + fps, 6, 16);
 	c.fillText("SCORE: " + score, 6, 32);
 	c.fillText("HISCORE: " + highScore, 6, 48);
+}
+
+// Exports
+export function getInst() {
+	return inst;
+}
+
+export function getC() {
+	return c;
+}
+
+export function getSAlert1() {
+	return sAlert1;
+}
+
+export function getSAlert2() {
+	return sAlert2;
 }
