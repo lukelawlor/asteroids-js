@@ -242,6 +242,15 @@ function oSpaceshipUD()
 		if (this.force >= PLAYER_FORCE_COUNT)
 			this.force = 0;
 	}
+	if (kd)
+	{
+		this.xforces[this.force] = -Math.cos(this.dir) * this.forceSpeed;
+		this.yforces[this.force] = -Math.sin(this.dir) * this.forceSpeed;
+
+		++this.force;
+		if (this.force >= PLAYER_FORCE_COUNT)
+			this.force = 0;
+	}
 
 	// Apply movement	
 	for (var i = 0; i < PLAYER_FORCE_COUNT; ++i)
