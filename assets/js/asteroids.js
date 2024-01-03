@@ -39,6 +39,7 @@ var bxt1 = 0;
 var byt1 = 0;
 var bxt2 = 0;
 var byt2 = 0;
+var gameAudioLoop = new Audio("./assets/audio/game-theme-loop.mp3")
 
 // Instances
 var inst = new Array(MAX_INSTANCES);
@@ -259,6 +260,7 @@ function oSpaceshipUD()
 		if (k1)
 		{
 			var shotSfx = new Audio("./assets/audio/laser-bolt.mp3");
+			shotSfx.volume = 0.25;
 			shotSfx.play();
 			this.shoot();
 			this.shootCooldown = this.shootCooldownReset;
@@ -520,6 +522,8 @@ function gmTitle()
 
 function gmStart()
 {
+	gameAudioLoop.loop = true;
+	gameAudioLoop.play();
 	inst.fill(null);
 	spawning = true;
 	spawnTimeReset = SPAWN_TIME_START;
@@ -530,6 +534,8 @@ function gmStart()
 
 function gmEnd()
 {
+	gameAudioLoop.pause();
+	gameAudioLoop.currentTime = 0;
 	if (score > highScore)
 		highScore = score;
 	inst.fill(null);
